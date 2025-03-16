@@ -20,7 +20,7 @@ module.exports = {
         200:"#0F1117",
         300:"#151821",
         400:"#212734",
-        200:"#3F4354",
+        500:"#3F4354",
        },
        light:{
         900:"#FFFFFF",
@@ -50,6 +50,10 @@ module.exports = {
                 lg: "var(--radius)",
                 md: "calc(var(--radius) - 2px)",
                 sm: "calc(var(--radius) - 4px)",
+              },
+              fontFamily: {
+                inter:['var(--font-inter)'],
+                "space-grotesk":['var(--font-space-grotesk)']
               },
   },
   plugins: [],
