@@ -1,0 +1,11 @@
+{
+	"folders": [
+		{
+			"name": "ultimate-nextjs-course",
+			"path": ".."
+		}
+	],
+	"settings": {
+		"typescript.tsdk": "node_modules/typescript/lib"
+	}
+}
