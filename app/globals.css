@@ -142,7 +142,15 @@
   .base-bold {
     @apply text-[18px] font-bold leading-[140%];
   }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
 
+  /* Hide scrollbar for IE, Edge and Firefox */
+  .no-scrollbar {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+  }
   .paragraph-regular {
     @apply text-[16px] font-normal leading-[22.4px];
   }
