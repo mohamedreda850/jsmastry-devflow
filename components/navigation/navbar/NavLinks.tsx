@@ -9,7 +9,7 @@ import { SheetClose } from "@/components/ui/sheet";
 
 const NavLinks = ({ isMobileNav = false }: { isMobileNav?: boolean }) => {
   const pathname = usePathname();
-  const userId =1 ;
+  const userId = 1;
   return (
     <>
       {sidebarLinks.map((item) => {
@@ -17,12 +17,10 @@ const NavLinks = ({ isMobileNav = false }: { isMobileNav?: boolean }) => {
           (pathname.includes(item.route) && item.route.length > 1) ||
           pathname === item.route;
 
-
-          if(item.route === '/profile'){
-            if(userId) item.route = `${item.route}/${userId}`
-            else return null
-          }
-
+        if (item.route === "/profile") {
+          if (userId) item.route = `${item.route}/${userId}`;
+          else return null;
+        }
 
         const LinkComponent = (
           <Link
@@ -52,11 +50,13 @@ const NavLinks = ({ isMobileNav = false }: { isMobileNav?: boolean }) => {
             </p>
           </Link>
         );
-        return isMobileNav?(
+        return isMobileNav ? (
           <SheetClose asChild key={item.route}>
             {LinkComponent}
           </SheetClose>
-        ):(<div key={item.route}>{LinkComponent}</div>);
+        ) : (
+          <div key={item.route}>{LinkComponent}</div>
+        );
       })}
     </>
   );
