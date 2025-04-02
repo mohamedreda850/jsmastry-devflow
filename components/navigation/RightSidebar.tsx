@@ -1,6 +1,6 @@
 import ROUTES from "@/constants/routes";
 import Link from "next/link";
-import icon from "./../../public/icons/chevron-right.svg"
+import icon from "./../../public/icons/chevron-right.svg";
 import Image from "next/image";
 import TagCards from "../cards/TagCard";
 const hotQuestions = [
@@ -11,12 +11,12 @@ const hotQuestions = [
   { _id: "5", title: "How to use React Context?" },
 ];
 const popularTags = [
-    { _id: "1", name: "react", questions: 100 },
-    { _id: "2", name: "javascript", questions: 200 },
-    { _id: "3", name: "typescript", questions: 150 },
-    { _id: "4", name: "nextjs", questions: 50 },
-    { _id: "5", name: "react-query", questions: 75 },
-  ];
+  { _id: "1", name: "react", questions: 100 },
+  { _id: "2", name: "javascript", questions: 200 },
+  { _id: "3", name: "typescript", questions: 150 },
+  { _id: "4", name: "nextjs", questions: 50 },
+  { _id: "5", name: "react-query", questions: 75 },
+];
 const RightSidebar = () => {
   return (
     <section className="pt-36 custom-scrollbar background-light900_dark200 light-border sticky right-0 top-0 flex h-screen w-[350px] flex-col gap-6 overflow-y-auto border-l p-6 shadow-light-300 dark:shadow-none max-xl:hidden  ">
@@ -30,7 +30,13 @@ const RightSidebar = () => {
               key={_id}
             >
               <p className="body-medium text-dark500_light700">{title}</p>
-              <Image src={icon} alt="chevron-right" width={20} height={20} className="invert-colors"/>
+              <Image
+                src={icon}
+                alt="chevron-right"
+                width={20}
+                height={20}
+                className="invert-colors"
+              />
             </Link>
           ))}
         </div>
@@ -38,7 +44,16 @@ const RightSidebar = () => {
       <div className="mt-16">
         <h3 className="h3-bold text-dark200_light900 ">Popular Tags</h3>
         <div className="mt-7 flex flex-col gap-4">
-            {popularTags.map(({_id,name,questions})=>(<TagCards key={_id} _id={_id} name={name} questions={questions} showCount compact/>))}
+          {popularTags.map(({ _id, name, questions }) => (
+            <TagCards
+              key={_id}
+              _id={_id}
+              name={name}
+              questions={questions}
+              showCount
+              compact
+            />
+          ))}
         </div>
       </div>
     </section>
