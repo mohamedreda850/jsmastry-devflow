@@ -4,6 +4,7 @@ import ROUTES from "@/constants/routes";
 import Link from "next/link";
 import searchImage from "./../../public/icons/search.svg";
 import HomeFilter from "@/components/filters/HomeFilter";
+import QuestionCard from "@/components/cards/QuestionCard";
 const questions = [
   {
     _id: "1",
@@ -13,7 +14,7 @@ const questions = [
       { _id: "1", name: "React" },
       { _id: "2", name: "React" },
     ],
-    author: { _id: "1", name: "John Doe" },
+    author: { _id: "1", name: "John Doe", image:'https://png.pngtree.com/png-clipart/20230927/original/pngtree-man-avatar-image-for-profile-png-image_13001877.png' },
     upvotes: 10,
     answers: 5,
     views: 100,
@@ -27,7 +28,7 @@ const questions = [
       { _id: "1", name: "JavaScript" },
       { _id: "2", name: "JavaScript" },
     ],
-    author: { _id: "1", name: "John Doe" },
+    author: { _id: "1", name: "John Doe", image:'https://png.pngtree.com/png-clipart/20230927/original/pngtree-man-avatar-image-for-profile-png-image_13001877.png' },
     upvotes: 10,
     answers: 5,
     views: 100,
@@ -38,7 +39,7 @@ interface SearchParams {
   searchParams: Promise<{ [key: string]: string }>;
 }
 const Home = async ({ searchParams }: SearchParams) => {
-  const { query = "" ,filter = ''} = await searchParams;
+  const { query = "", filter = "" } = await searchParams;
   const filteredQuestions = questions.filter((question) => {
     // Match query against the title
     const matchesQuery = question.title
@@ -48,7 +49,7 @@ const Home = async ({ searchParams }: SearchParams) => {
     // Match filter against tags or author name, adjust logic as needed
     const matchesFilter = filter
       ? question.tags.some(
-          (tag) => tag.name.toLowerCase() === filter.toLowerCase()
+          (tag) => tag.name.toLowerCase() === filter.toLowerCase(),
         ) || question.author.name.toLowerCase() === filter.toLowerCase()
       : true; // If no filter is provided, include all questions
 
@@ -76,7 +77,7 @@ const Home = async ({ searchParams }: SearchParams) => {
       <HomeFilter />
       <div className="mt-10 flex w-full flex-col gap-6">
         {filteredQuestions.map((question) => (
-          <h1 key={question._id}>{question.title}</h1>
+          <QuestionCard key={question._id} question={question} />
         ))}
       </div>
     </>
