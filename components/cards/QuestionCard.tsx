@@ -4,9 +4,9 @@ import Link from "next/link";
 import React from "react";
 import TagCards from "./TagCard";
 import Metric from "../Metric";
-import likeIcon from "./../../public/icons/like.svg"
-import messageIcon from "./../../public/icons/message.svg"
-import eyeIcon from "./../../public/icons/eye.svg"
+import likeIcon from "./../../public/icons/like.svg";
+import messageIcon from "./../../public/icons/message.svg";
+import eyeIcon from "./../../public/icons/eye.svg";
 interface Props {
   question: Question;
 }
@@ -33,38 +33,37 @@ const QuestionCard = ({
         ))}
       </div>
       <div className="flex-between mt-6 w-full flex-wrap gap-3">
-        <Metric 
-        imgUrl={author.image}
-        alt={author.name}
-        value={author.name}
-        title={`• asked ${getTimeStamp(createdAt)} `}
-        href={ROUTES.PROFILE(author._id)}
-        textStyles="body-medium text-dark400_light700"
-        isAuthor
+        <Metric
+          imgUrl={author.image}
+          alt={author.name}
+          value={author.name}
+          title={`• asked ${getTimeStamp(createdAt)} `}
+          href={ROUTES.PROFILE(author._id)}
+          textStyles="body-medium text-dark400_light700"
+          isAuthor
         />
         <div className="flex items-center gap-3 max-sm:flex-wrap max-sm:justify-start">
-            <Metric
+          <Metric
             imgUrl={likeIcon}
             alt="like"
             value={upvotes}
             title="votes"
             textStyles="small-medium text-dark400_light800"
-            />
-            <Metric
+          />
+          <Metric
             imgUrl={messageIcon}
             alt="answers"
             value={answers}
             title="answers"
             textStyles="small-medium text-dark400_light800"
-            />
-            <Metric
+          />
+          <Metric
             imgUrl={eyeIcon}
             alt="views"
             value={views}
             title="views"
             textStyles="small-medium text-dark400_light800"
-            />
-
+          />
         </div>
       </div>
     </div>
