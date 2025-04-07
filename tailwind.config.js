@@ -109,5 +109,5 @@ module.exports = {
       "auth-light": 'url("/images/auth-light.png")',
     },
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [require("tailwindcss-animate"), require("@tailwindcss/typography")],
 };
