@@ -1,7 +1,7 @@
 import type { NextConfig } from "next";
-import { hostname } from "os";
 
 const nextConfig: NextConfig = {
+  serverExternalPackages:['pino' , "pino-pretty"],
   images: {
     remotePatterns: [
       { protocol: "https", hostname: "png.pngtree.com", port: "" },
