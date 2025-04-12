@@ -1,4 +1,4 @@
-import { model, models, Schema, Types } from 'mongoose';
+import { Document, model, models, Schema, Types } from 'mongoose';
 
 
 export interface IAnswer{
@@ -9,7 +9,7 @@ export interface IAnswer{
     downvotes:number;
 
 }
-
+export interface IAnswerDoc extends IAnswer, Document {}
 const answerSchema = new Schema<IAnswer>({
 auther:{ type: Schema.Types.ObjectId, ref: "User" , required: true },
 question:{ type: Schema.Types.ObjectId,ref:"Question", required: true },
