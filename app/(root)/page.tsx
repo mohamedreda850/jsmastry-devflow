@@ -6,7 +6,6 @@ import searchImage from "./../../public/icons/search.svg";
 import HomeFilter from "@/components/filters/HomeFilter";
 import QuestionCard from "@/components/cards/QuestionCard";
 
-
 const questions = [
   {
     _id: "1",
@@ -48,12 +47,10 @@ const questions = [
   },
 ];
 
-
 interface SearchParams {
   searchParams: Promise<{ [key: string]: string }>;
 }
 const Home = async ({ searchParams }: SearchParams) => {
- 
   const { query = "", filter = "" } = await searchParams;
   const filteredQuestions = questions.filter((question) => {
     // Match query against the title

@@ -61,14 +61,14 @@ const QuestionForm = () => {
       }
     }
   };
-  const handleTagRemove = (tag:string , field:{values:string[]}) => {
-    const newTags = field.values.filter((t)=>t!==tag);
-    form.setValue("tags",newTags);
-    if(newTags.length===0){
-        form.setError("tags",{
-            type:"manual",
-            message:"At least one tag is required",
-        })
+  const handleTagRemove = (tag: string, field: { values: string[] }) => {
+    const newTags = field.values.filter((t) => t !== tag);
+    form.setValue("tags", newTags);
+    if (newTags.length === 0) {
+      form.setError("tags", {
+        type: "manual",
+        message: "At least one tag is required",
+      });
     }
   };
   const handleCreateQuestion = (data: z.infer<typeof AskQuestionSchema>) => {
@@ -150,7 +150,9 @@ const QuestionForm = () => {
                           compact
                           remove
                           isButton
-                          handelRemove={() => handleTagRemove(tag, { values: field.value })}
+                          handelRemove={() =>
+                            handleTagRemove(tag, { values: field.value })
+                          }
                         />
                       ))}
                     </div>
