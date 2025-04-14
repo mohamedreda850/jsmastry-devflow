@@ -86,7 +86,6 @@ export const UserSchema = z.object({
   reputation: z.number().optional(),
 });
 
-
 export const AccountSchema = z.object({
   userId: z.string().min(1, { message: "User ID is required." }),
   name: z.string().min(1, { message: "Name is required." }),

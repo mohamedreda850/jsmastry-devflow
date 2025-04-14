@@ -5,6 +5,8 @@ import Link from "next/link";
 import searchImage from "./../../public/icons/search.svg";
 import HomeFilter from "@/components/filters/HomeFilter";
 import QuestionCard from "@/components/cards/QuestionCard";
+import logger from "@/lib/logger";
+import { api } from "@/lib/api";
 
 const questions = [
   {
@@ -50,7 +52,19 @@ const questions = [
 interface SearchParams {
   searchParams: Promise<{ [key: string]: string }>;
 }
+
+const test = async ()=>{
+  try {
+    return await api.users.getAll()
+  } catch (error) {
+    logger.error("Error in test function", error);
+    
+  }
+}
 const Home = async ({ searchParams }: SearchParams) => {
+  const users = await test();
+  console.log("users", users);
+  
   const { query = "", filter = "" } = await searchParams;
   const filteredQuestions = questions.filter((question) => {
     // Match query against the title
