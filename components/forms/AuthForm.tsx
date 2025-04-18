@@ -22,11 +22,14 @@ import {
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import ROUTES from "@/constants/routes";
+import { ActionResponse } from "@/types/global";
+import { toast } from "@/hooks/use-toast";
+import { useRouter } from "next/navigation";
 
 interface AuthFormProps<T extends FieldValues> {
   schema: ZodType<T>;
   defaultValues: T;
-  onSubmit: (data: T) => Promise<{ success: boolean }>;
+  onSubmit: (data: T) => Promise<ActionResponse>;
   formType: "SIGN-IN" | "SIGN-UP";
 }
 const AuthForm = <T extends FieldValues>({
@@ -39,9 +42,23 @@ const AuthForm = <T extends FieldValues>({
     resolver: zodResolver(schema),
     defaultValues: defaultValues as DefaultValues<T>,
   });
+  const router = useRouter()
 
   const handleSubmit: SubmitHandler<T> = async (data) => {
-    //TODO: Authenticate User
+    const result = (await onSubmit(data)) as ActionResponse
+    if(result?.success){
+      toast({
+        title:'Success',
+        description: formType ==="SIGN-IN"?"Signed in successfully": "Signed up successfully"
+      })
+      router.push(ROUTES.HOME)
+    }else{
+      toast({
+        title:`Error ${result?.status}`,
+        description:result?.error?.message,
+        variant:"destructive"
+      })
+    }
   };
   const buttonText = formType === "SIGN-IN" ? "Sign In" : "Sign Up";
   return (
@@ -89,7 +106,7 @@ const AuthForm = <T extends FieldValues>({
         </Button>
         {formType === "SIGN-IN" ? (
           <p>
-            Don't have an account?{" "}
+            Do not have an account?{" "}
             <Link
               className="paragraph-semibold primary-text-gradient"
               href={ROUTES.SIGN_UP}
