@@ -42,22 +42,25 @@ const AuthForm = <T extends FieldValues>({
     resolver: zodResolver(schema),
     defaultValues: defaultValues as DefaultValues<T>,
   });
-  const router = useRouter()
+  const router = useRouter();
 
   const handleSubmit: SubmitHandler<T> = async (data) => {
-    const result = (await onSubmit(data)) as ActionResponse
-    if(result?.success){
+    const result = (await onSubmit(data)) as ActionResponse;
+    if (result?.success) {
       toast({
-        title:'Success',
-        description: formType ==="SIGN-IN"?"Signed in successfully": "Signed up successfully"
-      })
-      router.push(ROUTES.HOME)
-    }else{
+        title: "Success",
+        description:
+          formType === "SIGN-IN"
+            ? "Signed in successfully"
+            : "Signed up successfully",
+      });
+      router.push(ROUTES.HOME);
+    } else {
       toast({
-        title:`Error ${result?.status}`,
-        description:result?.error?.message,
-        variant:"destructive"
-      })
+        title: `Error ${result?.status}`,
+        description: result?.error?.message,
+        variant: "destructive",
+      });
     }
   };
   const buttonText = formType === "SIGN-IN" ? "Sign In" : "Sign Up";

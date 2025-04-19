@@ -5,7 +5,6 @@ import Link from "next/link";
 import searchImage from "./../../public/icons/search.svg";
 import HomeFilter from "@/components/filters/HomeFilter";
 import QuestionCard from "@/components/cards/QuestionCard";
-import { auth } from "@/Auth";
 
 const questions = [
   {
@@ -52,25 +51,21 @@ interface SearchParams {
   searchParams: Promise<{ [key: string]: string }>;
 }
 
-
 const Home = async ({ searchParams }: SearchParams) => {
-const session = await auth()
-console.log("session",session)
+
 
   const { query = "", filter = "" } = await searchParams;
   const filteredQuestions = questions.filter((question) => {
-    // Match query against the title
     const matchesQuery = question.title
       .toLowerCase()
       .includes(query.toLowerCase());
 
-    // Match filter against tags or author name, adjust logic as needed
+   
     const matchesFilter = filter
       ? question.tags.some(
           (tag) => tag.name.toLowerCase() === filter.toLowerCase(),
         ) || question.author.name.toLowerCase() === filter.toLowerCase()
-      : true; // If no filter is provided, include all questions
-
+      : true; 
     return matchesQuery && matchesFilter;
   });
   return (

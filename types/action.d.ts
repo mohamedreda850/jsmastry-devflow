@@ -9,10 +9,9 @@ interface signinWithOAuthParams {
   };
 }
 
-
-interface AuthCredentials{
-    name : string ;
-    username: string;
-    email:string;
-    password:string
+interface AuthCredentials {
+  name: string;
+  username: string;
+  email: string;
+  password: string;
 }

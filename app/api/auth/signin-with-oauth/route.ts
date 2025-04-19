@@ -66,7 +66,7 @@ export async function POST(request: Request) {
       );
     }
     await session.commitTransaction();
-    return NextResponse.json({success : true})
+    return NextResponse.json({ success: true });
   } catch (error: unknown) {
     await session.abortTransaction();
     return handleError(error, "api") as APIErrorResponse;

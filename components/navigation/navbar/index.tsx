@@ -4,7 +4,10 @@ import React from "react";
 import logo from "./../../../public/images/site-logo.svg";
 import Theme from "./Theme";
 import MobileNavigation from "./MobileNavigation";
-const NavBar = () => {
+import { auth } from "@/Auth";
+import UserAvatar from "@/components/UserAvatar";
+const NavBar = async() => {
+  const session = await auth()
   return (
     <nav className="flex-between background-light900_dark200 fixed z-50 w-full p-6 dark:shadow-none sm:px-12 shadow-light-300 gap-5">
       <Link href="/" className="flex items-center gap-1">
@@ -17,6 +20,11 @@ const NavBar = () => {
       <div className="flex-between gap-5 ">
         {" "}
         <Theme />
+        {session?.user?.id&& (<UserAvatar
+        id={session?.user?.id}
+        name={session.user.name!}
+        imageUrl={session?.user?.image}
+        />)}
         <MobileNavigation />
       </div>
     </nav>
