@@ -8,7 +8,7 @@ export interface IQuestion {
   upvotes: number;
   downvotes: number;
   answers: number;
-  auther: Types.ObjectId;
+  author: Types.ObjectId;
 }
 export interface IQuestionDoc extends IQuestion, Document {}
 const questionSchema = new Schema<IQuestion>(
@@ -20,11 +20,11 @@ const questionSchema = new Schema<IQuestion>(
     upvotes: { type: Number, default: 0 },
     downvotes: { type: Number, default: 0 },
     answers: { type: Number, default: 0 },
-    auther: { type: Schema.Types.ObjectId, ref: "User", required: true },
+    author: { type: Schema.Types.ObjectId, ref: "User", required: true },
   },
-  { timestamps: true },
+  { timestamps: true }
 );
 
 const Question =
-  models?.question || model<IQuestion>("Question", questionSchema);
+  models?.Question || model<IQuestion>("Question", questionSchema);
 export default Question;

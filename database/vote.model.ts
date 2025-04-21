@@ -13,5 +13,5 @@ const voteSchema = new Schema<IVote>({
   type: { type: String, enum: ["question", "answer"], required: true },
   voteType: { type: String, enum: ["upvote", "downvote"], required: true },
 });
-const Vote = models.vote || model<IVote>("Vote", voteSchema);
+const Vote = models.Vote || model<IVote>("Vote", voteSchema);
 export default Vote;

@@ -52,20 +52,17 @@ interface SearchParams {
 }
 
 const Home = async ({ searchParams }: SearchParams) => {
-
-
   const { query = "", filter = "" } = await searchParams;
   const filteredQuestions = questions.filter((question) => {
     const matchesQuery = question.title
       .toLowerCase()
       .includes(query.toLowerCase());
 
-   
     const matchesFilter = filter
       ? question.tags.some(
           (tag) => tag.name.toLowerCase() === filter.toLowerCase(),
         ) || question.author.name.toLowerCase() === filter.toLowerCase()
-      : true; 
+      : true;
     return matchesQuery && matchesFilter;
   });
   return (
