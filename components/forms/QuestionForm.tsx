@@ -19,24 +19,27 @@ import { useRef, useTransition } from "react";
 import dynamic from "next/dynamic";
 import TagCards from "../cards/TagCard";
 import { z } from "zod";
-import { createQuestion } from "@/lib/actions/question.action";
+import { createQuestion, editQuestion } from "@/lib/actions/question.action";
 import { toast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
 import ROUTES from "@/constants/routes";
 import { Loader } from "lucide-react";
+import { Question } from "@/types/global";
 const Editor = dynamic(() => import("@/components/editor"), {
   ssr: false,
 });
-
-const QuestionForm = () => {
+interface Params { question?: Question ;
+  isEdit?: boolean;
+}
+const QuestionForm = ({question,isEdit=false}:Params) => {
   const [isPending , startTransition] = useTransition()
     const router = useRouter();
   const form = useForm<z.infer<typeof AskQuestionSchema>>({
     resolver: zodResolver(AskQuestionSchema),
     defaultValues: {
-      title: "",
-      content: "",
-      tags: [],
+      title: question?.title|| "",
+      content: question?.content|| "",
+      tags: question?.tags.map((tag)=>tag.name) || [],
     },
   });
   const editorRef = useRef<MDXEditorMethods>(null);
@@ -77,7 +80,27 @@ const QuestionForm = () => {
     }
   };
   const handleCreateQuestion = async(data: z.infer<typeof AskQuestionSchema>) => {
-    startTransition(async()=>{  const result = await createQuestion(data)
+    startTransition(async()=>{  
+      
+      if(isEdit && question){
+        const result = await editQuestion({questionId : question?._id ,...data })
+        if(result.success){
+          toast({
+            title: "Success",
+            description: "Question updated successfully",
+          })
+          if(result.data) router.push(ROUTES.QUESTION(result.data._id))
+      
+         }else{
+          toast({
+            title: `Error ${result?.status}`,
+            description: result.error?.message ||  "Somthing went wrong" , 
+            variant: "destructive",
+          });
+         }
+         return;
+      }
+      const result = await createQuestion(data)
    if(result.success){
     toast({
       title: "Success",
@@ -197,7 +220,7 @@ const QuestionForm = () => {
             {isPending?(<>
             <Loader className="mr-2 size-4 animate-spin" />
             <span>Submiting</span>
-            </>):"Ask A Question"}
+            </>):<>{isEdit?"edit":"Ask A Question"}</>}
             
           </Button>
         </div>

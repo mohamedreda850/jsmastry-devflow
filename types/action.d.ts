@@ -16,8 +16,17 @@ interface AuthCredentials {
   password: string;
 }
 
-interface creatQuestionParams {
+interface CreatQuestionParams {
   title: string;
   content: string;
   tags: string[];
+}
+
+interface EditQuestionParams extends CreatQuestionParams {
+  questionId: string;
+
+}
+
+interface GetQuestionParams{
+  questionId: string;
 }
