@@ -7,6 +7,7 @@ import Metric from "../Metric";
 import likeIcon from "./../../public/icons/like.svg";
 import messageIcon from "./../../public/icons/message.svg";
 import eyeIcon from "./../../public/icons/eye.svg";
+import { Question, Tag } from "@/types/global";
 interface Props {
   question: Question;
 }
