@@ -172,7 +172,7 @@ export async function getQuestion(params:GetQuestionParams) : Promise<ActionResp
 }
 
 
-export async function getQuestions(params:PaginatedSearchParams):Promise<ActionResponse<{questions:IQuestionDoc[] , isNext:boolean}>>{
+export async function getQuestions(params:PaginatedSearchParams):Promise<ActionResponse<{questions:Question[] , isNext:boolean}>>{
   const validationResult = await action({
     params,
     schema: PaginatedSearchPaamsSchema,
