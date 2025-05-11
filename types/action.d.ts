@@ -1,3 +1,5 @@
+import { PaginatedSearchParams } from "./global";
+
 interface signinWithOAuthParams {
   provider: "github" | "google";
   providerAccountId: string;
@@ -28,4 +30,8 @@ interface EditQuestionParams extends CreatQuestionParams {
 
 interface GetQuestionParams {
   questionId: string;
+}
+
+interface GetTagQuestionParams extends Omit<PaginatedSearchParams, "filter">{
+  tagId: string
 }
