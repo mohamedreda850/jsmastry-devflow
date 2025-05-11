@@ -6,20 +6,19 @@ import { RouteParams } from "@/types/global";
 import { notFound, redirect } from "next/navigation";
 import React from "react";
 
-const EditQuestion = async ({params}:RouteParams) => {
-    const {id} = await params;
-    if(!id) return notFound()
+const EditQuestion = async ({ params }: RouteParams) => {
+  const { id } = await params;
+  if (!id) return notFound();
   const session = await auth();
   if (!session) return redirect("/sign-in");
 
-const {data:question,success} =await getQuestion({questionId:id})
-if(!success) return notFound()
-if(question?.auther?.toString() === session?.user?.id) redirect(ROUTES.QUESTION(id))
+  const { data: question, success } = await getQuestion({ questionId: id });
+  if (!success) return notFound();
+  if (question?.auther?.toString() === session?.user?.id)
+    redirect(ROUTES.QUESTION(id));
   return (
     <main>
-    
-        <QuestionForm question={question} isEdit/>
-    
+      <QuestionForm question={question} isEdit />
     </main>
   );
 };

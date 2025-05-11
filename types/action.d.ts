@@ -24,9 +24,8 @@ interface CreatQuestionParams {
 
 interface EditQuestionParams extends CreatQuestionParams {
   questionId: string;
-
 }
 
-interface GetQuestionParams{
+interface GetQuestionParams {
   questionId: string;
 }

@@ -28,18 +28,19 @@ import { Question } from "@/types/global";
 const Editor = dynamic(() => import("@/components/editor"), {
   ssr: false,
 });
-interface Params { question?: Question ;
+interface Params {
+  question?: Question;
   isEdit?: boolean;
 }
-const QuestionForm = ({question,isEdit=false}:Params) => {
-  const [isPending , startTransition] = useTransition()
-    const router = useRouter();
+const QuestionForm = ({ question, isEdit = false }: Params) => {
+  const [isPending, startTransition] = useTransition();
+  const router = useRouter();
   const form = useForm<z.infer<typeof AskQuestionSchema>>({
     resolver: zodResolver(AskQuestionSchema),
     defaultValues: {
-      title: question?.title|| "",
-      content: question?.content|| "",
-      tags: question?.tags.map((tag)=>tag.name) || [],
+      title: question?.title || "",
+      content: question?.content || "",
+      tags: question?.tags.map((tag) => tag.name) || [],
     },
   });
   const editorRef = useRef<MDXEditorMethods>(null);
@@ -79,43 +80,45 @@ const QuestionForm = ({question,isEdit=false}:Params) => {
       });
     }
   };
-  const handleCreateQuestion = async(data: z.infer<typeof AskQuestionSchema>) => {
-    startTransition(async()=>{  
-      
-      if(isEdit && question){
-        const result = await editQuestion({questionId : question?._id ,...data })
-        if(result.success){
+  const handleCreateQuestion = async (
+    data: z.infer<typeof AskQuestionSchema>,
+  ) => {
+    startTransition(async () => {
+      if (isEdit && question) {
+        const result = await editQuestion({
+          questionId: question?._id,
+          ...data,
+        });
+        if (result.success) {
           toast({
             title: "Success",
             description: "Question updated successfully",
-          })
-          if(result.data) router.push(ROUTES.QUESTION(result.data._id))
-      
-         }else{
+          });
+          if (result.data) router.push(ROUTES.QUESTION(result.data._id));
+        } else {
           toast({
             title: `Error ${result?.status}`,
-            description: result.error?.message ||  "Somthing went wrong" , 
+            description: result.error?.message || "Somthing went wrong",
             variant: "destructive",
           });
-         }
-         return;
+        }
+        return;
       }
-      const result = await createQuestion(data)
-   if(result.success){
-    toast({
-      title: "Success",
-      description: "Question created successfully",
-    })
-    if(result.data) router.push(ROUTES.QUESTION(result.data._id))
-
-   }else{
-    toast({
-      title: `Error ${result?.status}`,
-      description: result.error?.message ||  "Somthing went wrong" , 
-      variant: "destructive",
+      const result = await createQuestion(data);
+      if (result.success) {
+        toast({
+          title: "Success",
+          description: "Question created successfully",
+        });
+        if (result.data) router.push(ROUTES.QUESTION(result.data._id));
+      } else {
+        toast({
+          title: `Error ${result?.status}`,
+          description: result.error?.message || "Somthing went wrong",
+          variant: "destructive",
+        });
+      }
     });
-   }})
-  
   };
   return (
     <Form {...form}>
@@ -217,11 +220,14 @@ const QuestionForm = ({question,isEdit=false}:Params) => {
             disabled={isPending}
             className="primary-gradient w-fit !text-light-900"
           >
-            {isPending?(<>
-            <Loader className="mr-2 size-4 animate-spin" />
-            <span>Submiting</span>
-            </>):<>{isEdit?"edit":"Ask A Question"}</>}
-            
+            {isPending ? (
+              <>
+                <Loader className="mr-2 size-4 animate-spin" />
+                <span>Submiting</span>
+              </>
+            ) : (
+              <>{isEdit ? "edit" : "Ask A Question"}</>
+            )}
           </Button>
         </div>
       </form>

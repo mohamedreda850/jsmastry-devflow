@@ -12,7 +12,7 @@ interface Author {
 interface Question {
   _id: string;
   title: string;
-  content:string;
+  content: string;
   tags: Tag[];
   author: Author;
   createdAt: Date;
@@ -41,10 +41,10 @@ interface RouteParams {
   searchParams: Promise<Record<string, string>>;
 }
 
-interface PaginatedSearchParams{
+interface PaginatedSearchParams {
   page?: number;
   pageSize?: number;
   query?: AbsoluteString;
   filter?: string;
-  sort?:string
+  sort?: string;
 }
