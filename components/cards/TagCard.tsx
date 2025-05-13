@@ -8,7 +8,7 @@ import imgClose from "./../../public/icons/close.svg";
 interface Props {
   _id: string;
   name: string;
-  question?: number;
+  questions?: number;
   showCount?: boolean;
   compact?: boolean;
   remove?: boolean;
@@ -18,7 +18,7 @@ interface Props {
 const TagCards = ({
   _id,
   name,
-  question,
+  questions,
   showCount,
   compact,
   remove,
@@ -50,7 +50,7 @@ const TagCards = ({
         )}
       </Badge>
       {showCount && (
-        <p className="small-medium text-dark500_light700">{question}</p>
+        <p className="small-medium text-dark500_light700">{questions}</p>
       )}
     </>
   );
@@ -79,7 +79,7 @@ const TagCards = ({
         </p>
         <p className="small-medium text-dark400_light500 mt-3.5">
           <span className="body-semibold primary-text-gradient mr-2.5">
-            {question}+
+            {questions}+
           </span>
           Questions
         </p>

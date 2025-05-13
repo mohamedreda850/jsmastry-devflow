@@ -25,7 +25,7 @@ const Home = async ({ searchParams }: SearchParams) => {
 
   return (
     <>
-      <section className="w-full flex flex-col-reverse sm:flex-row justify-between gap-4 sm:items-center">
+      <section className="w-full flex flex-col-reverse justify-between gap-4 sm:items-center sm:flex-row">
         <h1 className="h1-bold text-dark100_light900">All Questions</h1>
         <Button
           className="primary-gradient min-h-[46px] px-4 py-3 !text-light-900"

@@ -4,12 +4,13 @@ import {
   ErrorResponse,
   PaginatedSearchParams,
   Question,
+  Tag,
   
 } from "@/types/global";
 import action from "../handlers/action";
 import handleError from "../handlers/error";
 import { FilterQuery } from "mongoose";
-import { Question as Question1, Tag } from "@/database";
+import { Question as Question1, Tag as Tag1 } from "@/database";
 import { GetTagQuestionParams } from "@/types/action";
 
 export const getTags = async (
@@ -30,7 +31,7 @@ export const getTags = async (
 
   const limit = Number(pageSize);
 
-  const filterQuery: FilterQuery<typeof Tag> = {};
+  const filterQuery: FilterQuery<typeof Tag1> = {};
 
   if (query) {
     filterQuery.$or = [{ name: { $regex: query, $options: "i" } }];
@@ -57,8 +58,8 @@ export const getTags = async (
   }
 
   try {
-    const totalTags = await Tag.countDocuments(filterQuery);
-    const tags = await Tag.find(filterQuery)
+    const totalTags = await Tag1.countDocuments(filterQuery);
+    const tags = await Tag1.find(filterQuery)
       .sort(sortCriteria)
       .skip(skip)
       .limit(limit);
@@ -96,7 +97,7 @@ export const getTagQuestions = async (
   
   
   try {
-    const tag = await Tag.findById(tagId)
+    const tag = await Tag1.findById(tagId)
     if(!tag) throw new Error("Tagnot found");
 
     const filterQuery: FilterQuery<typeof Question1> = {
