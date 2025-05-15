@@ -94,7 +94,8 @@ const QuestionForm = ({ question, isEdit = false }: Params) => {
             title: "Success",
             description: "Question updated successfully",
           });
-          if (result.data) router.push(ROUTES.QUESTION(result.data._id as string));
+          if (result.data)
+            router.push(ROUTES.QUESTION(result.data._id as string));
         } else {
           toast({
             title: `Error ${result?.status}`,
@@ -110,7 +111,8 @@ const QuestionForm = ({ question, isEdit = false }: Params) => {
           title: "Success",
           description: "Question created successfully",
         });
-        if (result.data) router.push(ROUTES.QUESTION(result.data._id as string));
+        if (result.data)
+          router.push(ROUTES.QUESTION(result.data._id as string));
       } else {
         toast({
           title: `Error ${result?.status}`,

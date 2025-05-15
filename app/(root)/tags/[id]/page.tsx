@@ -1,27 +1,26 @@
-import QuestionCard from '@/components/cards/QuestionCard';
-import DataRenderer from '@/components/DataRenderer';
-import LocalSearch from '@/components/search/LocalSearch';
-import ROUTES from '@/constants/routes';
-import { EMPTY_QUESTION } from '@/constants/states';
-import { getTagQuestions } from '@/lib/actions/tag.action';
-import { RouteParams } from '@/types/global'
-import searchImage from "./../../../../public/icons/search.svg"
+import QuestionCard from "@/components/cards/QuestionCard";
+import DataRenderer from "@/components/DataRenderer";
+import LocalSearch from "@/components/search/LocalSearch";
+import ROUTES from "@/constants/routes";
+import { EMPTY_QUESTION } from "@/constants/states";
+import { getTagQuestions } from "@/lib/actions/tag.action";
+import { RouteParams } from "@/types/global";
+import searchImage from "./../../../../public/icons/search.svg";
 
-const page = async({params, searchParams}: RouteParams) => {
-    const {id} =await params;
-    const {page, pageSize, query} =await searchParams;
-    const {success, data, error} = await getTagQuestions({
-        tagId: id,
-        page: Number(page) || 1,
-        pageSize: Number(pageSize)|| 10,
-        query
-    })
-    const {tag, questions} = data || {}
+const page = async ({ params, searchParams }: RouteParams) => {
+  const { id } = await params;
+  const { page, pageSize, query } = await searchParams;
+  const { success, data, error } = await getTagQuestions({
+    tagId: id,
+    page: Number(page) || 1,
+    pageSize: Number(pageSize) || 10,
+    query,
+  });
+  const { tag, questions } = data || {};
   return (
     <>
       <section className="w-full flex flex-col-reverse sm:flex-row justify-between gap-4 sm:items-center">
         <h1 className="h1-bold text-dark100_light900">{tag?.name}</h1>
-       
       </section>
       <section className="mt-11">
         <LocalSearch
@@ -45,7 +44,7 @@ const page = async({params, searchParams}: RouteParams) => {
         )}
       />
     </>
-  )
-}
+  );
+};
 
-export default page
+export default page;

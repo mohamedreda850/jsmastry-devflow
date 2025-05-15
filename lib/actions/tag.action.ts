@@ -1,11 +1,13 @@
-import { getTagQuestionSchema, PaginatedSearchPaamsSchema } from "./../vaildations";
+import {
+  getTagQuestionSchema,
+  PaginatedSearchPaamsSchema,
+} from "./../vaildations";
 import {
   ActionResponse,
   ErrorResponse,
   PaginatedSearchParams,
   Question,
   Tag,
-  
 } from "@/types/global";
 import action from "../handlers/action";
 import handleError from "../handlers/error";
@@ -77,7 +79,9 @@ export const getTags = async (
 };
 export const getTagQuestions = async (
   params: GetTagQuestionParams,
-): Promise<ActionResponse<{ tag: Tag; questions: Question[] ;isNext: boolean }>> => {
+): Promise<
+  ActionResponse<{ tag: Tag; questions: Question[]; isNext: boolean }>
+> => {
   const validationResult = await action({
     params,
     schema: getTagQuestionSchema,
@@ -87,30 +91,30 @@ export const getTagQuestions = async (
     return handleError(validationResult) as ErrorResponse;
   }
 
-  const { page = 1, pageSize = 10, query,  tagId} = params;
+  const { page = 1, pageSize = 10, query, tagId } = params;
 
   const skip = (Number(page) - 1) * pageSize;
 
   const limit = Number(pageSize);
 
-  
-  
-  
   try {
-    const tag = await Tag1.findById(tagId)
-    if(!tag) throw new Error("Tagnot found");
+    const tag = await Tag1.findById(tagId);
+    if (!tag) throw new Error("Tagnot found");
 
     const filterQuery: FilterQuery<typeof Question1> = {
-        tags:{$in:[tagId]}
+      tags: { $in: [tagId] },
     };
-    
-      if (query) {
-        filterQuery.title = { $regex: query, $options: "i" } ;
-      }
+
+    if (query) {
+      filterQuery.title = { $regex: query, $options: "i" };
+    }
     const totalQuestions = await Question1.countDocuments(filterQuery);
     const questions = await Question1.find(filterQuery)
-      .select('_id title view answers upvotes downvotes author createdAt')
-      .populate([{path: 'author' , select: 'name image'},{path:'tags' , select:"name"}])
+      .select("_id title views answers upvotes downvotes author createdAt")
+      .populate([
+        { path: "author", select: "name image" },
+        { path: "tags", select: "name" },
+      ])
       .skip(skip)
       .limit(limit);
     const isNext = totalQuestions > skip + questions.length;
@@ -126,4 +130,3 @@ export const getTagQuestions = async (
     return handleError(error) as ErrorResponse;
   }
 };
-

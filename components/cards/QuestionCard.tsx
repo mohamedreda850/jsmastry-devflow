@@ -50,6 +50,8 @@ const QuestionCard = ({
             value={upvotes}
             title="votes"
             textStyles="small-medium text-dark400_light800"
+            isAuthor
+            titleStyles="max-sm:hidden"
           />
           <Metric
             imgUrl={messageIcon}

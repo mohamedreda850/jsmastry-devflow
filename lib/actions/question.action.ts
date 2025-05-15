@@ -18,10 +18,14 @@ import mongoose, { FilterQuery } from "mongoose";
 import Question, { IQuestionDoc } from "@/database/question.model";
 import Tag, { ITagDoc } from "@/database/tag.model";
 import TagQuestion from "@/database/tag-question.model";
-import { CreatQuestionParams, EditQuestionParams, GetQuestionParams } from "@/types/action";
+import {
+  CreatQuestionParams,
+  EditQuestionParams,
+  GetQuestionParams,
+} from "@/types/action";
 
 export async function createQuestion(
-  params: CreatQuestionParams,
+  params: CreatQuestionParams
 ): Promise<ActionResponse<IQuestionDoc>> {
   const validatedResult = await action({
     params,
@@ -39,7 +43,7 @@ export async function createQuestion(
   try {
     const [question] = await Question.create(
       [{ title, content, author: userId }],
-      { session },
+      { session }
     );
     if (!question) {
       throw new Error("Failed to create question");
@@ -50,12 +54,12 @@ export async function createQuestion(
       const existingTag = await Tag.findOneAndUpdate(
         { name: { $regex: new RegExp(`^${tag}$`, "i") } },
         { $setOnInsert: { name: tag }, $inc: { questions: 1 } },
-        { upsert: true, new: true, session },
+        { upsert: true, new: true, session }
       );
       tagIds.push(existingTag._id);
       tagQuestionDocuments.push({
         tag: existingTag._id,
-        question: question._id,
+        questions: question._id,
       });
     }
 
@@ -63,7 +67,7 @@ export async function createQuestion(
     await Question.findByIdAndUpdate(
       question._id,
       { $push: { tags: { $each: tagIds } } },
-      { session },
+      { session }
     );
     await session.commitTransaction();
     return { success: true, data: JSON.parse(JSON.stringify(question)) };
@@ -76,7 +80,7 @@ export async function createQuestion(
 }
 
 export async function editQuestion(
-  params: EditQuestionParams,
+  params: EditQuestionParams
 ): Promise<ActionResponse<IQuestionDoc>> {
   const validationResult = await action({
     params,
@@ -95,13 +99,15 @@ export async function editQuestion(
   session.startTransaction();
 
   try {
-    const question = await Question.findById(questionId).populate("tags");
+    const question = await Question.findById(questionId)
+      .populate("tags")
+      .populate("author");
 
     if (!question) {
       throw new Error("Question not found");
     }
 
-    if (question.author.toString() !== userId) {
+    if (!question.author.equals(userId)) {
       throw new Error("Unauthorized");
     }
 
@@ -114,12 +120,12 @@ export async function editQuestion(
     const tagsToAdd = tags.filter(
       (tag) =>
         !question.tags.some((t: ITagDoc) =>
-          t.name.toLowerCase().includes(tag.toLowerCase()),
-        ),
+          t.name.toLowerCase().includes(tag.toLowerCase())
+        )
     );
     const tagsToRemove = question.tags.filter(
       (tag: ITagDoc) =>
-        !tags.some((t) => t.toLowerCase() === tag.name.toLowerCase()),
+        !tags.some((t) => t.toLowerCase() === tag.name.toLowerCase())
     );
 
     const newTagDocuments = [];
@@ -129,13 +135,13 @@ export async function editQuestion(
         const existingTag = await Tag.findOneAndUpdate(
           { name: { $regex: `^${tag}$`, $options: "i" } },
           { $setOnInsert: { name: tag }, $inc: { questions: 1 } },
-          { upsert: true, new: true, session },
+          { upsert: true, new: true, session }
         );
 
         if (existingTag) {
           newTagDocuments.push({
             tag: existingTag._id,
-            question: questionId,
+            questions: questionId,
           });
 
           question.tags.push(existingTag._id);
@@ -149,19 +155,19 @@ export async function editQuestion(
       await Tag.updateMany(
         { _id: { $in: tagIdsToRemove } },
         { $inc: { questions: -1 } },
-        { session },
+        { session }
       );
 
       await TagQuestion.deleteMany(
-        { tag: { $in: tagIdsToRemove }, question: questionId },
-        { session },
+        { tag: { $in: tagIdsToRemove }, questions: questionId },
+        { session }
       );
 
       question.tags = question.tags.filter(
         (tagId: mongoose.Types.ObjectId) =>
           !tagIdsToRemove.some((id: mongoose.Types.ObjectId) =>
-            id.equals(tagId._id),
-          ),
+            id.equals(tagId._id)
+          )
       );
     }
 
@@ -182,8 +188,8 @@ export async function editQuestion(
 }
 
 export async function getQuestion(
-  params: GetQuestionParams,
-): Promise<ActionResponse<IQuestionDoc>> {
+  params: GetQuestionParams
+): Promise<ActionResponse<Question1>> {
   const validatedResult = await action({
     params,
     schema: getQuestionSchema,
@@ -196,7 +202,9 @@ export async function getQuestion(
   const { questionId } = validatedResult.params!;
 
   try {
-    const question = await Question.findById(questionId).populate("tags");
+    const question = await Question.findById(questionId)
+      .populate("tags")
+      .populate("author", "_id name image");
     if (!question) {
       throw new Error("Question not found");
     }
@@ -207,7 +215,7 @@ export async function getQuestion(
 }
 
 export async function getQuestions(
-  params: PaginatedSearchParams,
+  params: PaginatedSearchParams
 ): Promise<ActionResponse<{ questions: Question1[]; isNext: boolean }>> {
   const validationResult = await action({
     params,
