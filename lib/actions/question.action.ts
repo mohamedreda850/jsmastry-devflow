@@ -4,6 +4,7 @@ import {
   ActionResponse,
   ErrorResponse,
   PaginatedSearchParams,
+  Question as Question1,
 } from "@/types/global";
 import {
   AskQuestionSchema,
@@ -17,6 +18,7 @@ import mongoose, { FilterQuery } from "mongoose";
 import Question, { IQuestionDoc } from "@/database/question.model";
 import Tag, { ITagDoc } from "@/database/tag.model";
 import TagQuestion from "@/database/tag-question.model";
+import { CreatQuestionParams, EditQuestionParams, GetQuestionParams } from "@/types/action";
 
 export async function createQuestion(
   params: CreatQuestionParams,
@@ -47,7 +49,7 @@ export async function createQuestion(
     for (const tag of tags) {
       const existingTag = await Tag.findOneAndUpdate(
         { name: { $regex: new RegExp(`^${tag}$`, "i") } },
-        { $setOnInsert: { name: tag }, $inc: { question: 1 } },
+        { $setOnInsert: { name: tag }, $inc: { questions: 1 } },
         { upsert: true, new: true, session },
       );
       tagIds.push(existingTag._id);
@@ -206,7 +208,7 @@ export async function getQuestion(
 
 export async function getQuestions(
   params: PaginatedSearchParams,
-): Promise<ActionResponse<{ questions: Question[]; isNext: boolean }>> {
+): Promise<ActionResponse<{ questions: Question1[]; isNext: boolean }>> {
   const validationResult = await action({
     params,
     schema: PaginatedSearchPaamsSchema,

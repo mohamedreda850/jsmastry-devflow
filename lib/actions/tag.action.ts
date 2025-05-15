@@ -41,7 +41,7 @@ export const getTags = async (
 
   switch (filter) {
     case "popular":
-      sortCriteria = { question: -1 };
+      sortCriteria = { questions: -1 };
       break;
     case "recent":
       sortCriteria = { createdAt: -1 };
@@ -109,7 +109,7 @@ export const getTagQuestions = async (
       }
     const totalQuestions = await Question1.countDocuments(filterQuery);
     const questions = await Question1.find(filterQuery)
-      .select('_id title views answers upvote downvotes auther createdAt')
+      .select('_id title view answers upvotes downvotes author createdAt')
       .populate([{path: 'author' , select: 'name image'},{path:'tags' , select:"name"}])
       .skip(skip)
       .limit(limit);
