@@ -10,7 +10,7 @@ import { formatNumber, getTimeStamp } from "@/lib/utils";
 import TagCards from "@/components/cards/TagCard";
 import {Code} from 'bright'
 import {MDXRemote} from 'next-mdx-remote/rsc'
-import { getQuestion } from "@/lib/actions/question.action";
+import { getQuestion, incrementViews } from "@/lib/actions/question.action";
 import { redirect } from "next/navigation";
 
 
@@ -22,11 +22,16 @@ Code.theme = {
 }
 const QuestionDetails = async ({ params }: RouteParams) => {
   const { id } = await params;
-  const {success, data: question} = await getQuestion({questionId: id})
+  const [_, {success, data: question}] = await Promise.all([
+    await incrementViews({questionId: id}),
+    await getQuestion({questionId: id})
+  ])
+ 
+
   if(!success || !question) return  redirect("/404")
-  const { author, createdAt, answers, views, tags, title, content } = question;
+  const { author, createdAt, answers, view, tags, title, content } = question;
   const formattedContent = content.replace(/\\/g, '').replace(/&#x20;/g, '')
-  console.log(views);
+  
   
   return (
     <>
@@ -69,7 +74,7 @@ const QuestionDetails = async ({ params }: RouteParams) => {
         <Metric 
         imgUrl={eyeImage}
         alt='Clock icon'
-        value={formatNumber(views)}
+        value={formatNumber(view)}
         title= ""
         textStyles="small-regular text-dark_light700"
         />

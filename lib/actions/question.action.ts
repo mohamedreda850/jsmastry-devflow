@@ -10,6 +10,7 @@ import {
   AskQuestionSchema,
   EditQuestionSchema,
   getQuestionSchema,
+  incrementViewsSchema,
   PaginatedSearchPaamsSchema,
 } from "../vaildations";
 import action from "../handlers/action";
@@ -22,6 +23,7 @@ import {
   CreatQuestionParams,
   EditQuestionParams,
   GetQuestionParams,
+  IncrementViewsParams,
 } from "@/types/action";
 
 export async function createQuestion(
@@ -269,6 +271,33 @@ export async function getQuestions(
       success: true,
       data: { questions: JSON.parse(JSON.stringify(questions)), isNext },
     };
+  } catch (error) {
+    return handleError(error) as ErrorResponse;
+  }
+}
+
+export async function incrementViews(
+  params: IncrementViewsParams
+): Promise<ActionResponse<{ views: number }>> {
+  const validationResult = await action({
+    params,
+    schema: incrementViewsSchema,
+    authorize: true,
+  });
+
+  if (validationResult instanceof Error) {
+    return handleError(validationResult) as ErrorResponse;
+  }
+
+  const { questionId } = validationResult.params!;
+  try {
+    const question = await Question.findById(questionId);
+    if (!question) {
+      throw new Error("Question not found");
+    }
+    question.view += 1;
+    await question.save();
+    return { success: true, data: { views: question.view } };
   } catch (error) {
     return handleError(error) as ErrorResponse;
   }

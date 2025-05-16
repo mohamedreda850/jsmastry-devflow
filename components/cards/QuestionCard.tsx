@@ -12,7 +12,7 @@ interface Props {
   question: Question;
 }
 const QuestionCard = ({
-  question: { _id, title, author, tags, createdAt, upvotes, answers, views },
+  question: { _id, title, author, tags, createdAt, upvotes, answers, view },
 }: Props) => {
   return (
     <div className="card-wrapper rounded-[10px] p-9 sm:px-11 ">
@@ -63,7 +63,7 @@ const QuestionCard = ({
           <Metric
             imgUrl={eyeIcon}
             alt="views"
-            value={views}
+            value={view}
             title="views"
             textStyles="small-medium text-dark400_light800"
           />

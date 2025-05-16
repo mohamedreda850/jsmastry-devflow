@@ -18,7 +18,7 @@ interface Question {
   createdAt: Date;
   upvotes: number;
   answers: number;
-  views: number;
+  view: number;
   createdAt: Date;
 }
 
