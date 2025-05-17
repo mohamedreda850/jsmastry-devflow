@@ -27,7 +27,7 @@ import {
 } from "@/types/action";
 
 export async function createQuestion(
-  params: CreatQuestionParams
+  params: CreatQuestionParams,
 ): Promise<ActionResponse<IQuestionDoc>> {
   const validatedResult = await action({
     params,
@@ -45,7 +45,7 @@ export async function createQuestion(
   try {
     const [question] = await Question.create(
       [{ title, content, author: userId }],
-      { session }
+      { session },
     );
     if (!question) {
       throw new Error("Failed to create question");
@@ -56,7 +56,7 @@ export async function createQuestion(
       const existingTag = await Tag.findOneAndUpdate(
         { name: { $regex: new RegExp(`^${tag}$`, "i") } },
         { $setOnInsert: { name: tag }, $inc: { questions: 1 } },
-        { upsert: true, new: true, session }
+        { upsert: true, new: true, session },
       );
       tagIds.push(existingTag._id);
       tagQuestionDocuments.push({
@@ -69,7 +69,7 @@ export async function createQuestion(
     await Question.findByIdAndUpdate(
       question._id,
       { $push: { tags: { $each: tagIds } } },
-      { session }
+      { session },
     );
     await session.commitTransaction();
     return { success: true, data: JSON.parse(JSON.stringify(question)) };
@@ -82,7 +82,7 @@ export async function createQuestion(
 }
 
 export async function editQuestion(
-  params: EditQuestionParams
+  params: EditQuestionParams,
 ): Promise<ActionResponse<IQuestionDoc>> {
   const validationResult = await action({
     params,
@@ -122,12 +122,12 @@ export async function editQuestion(
     const tagsToAdd = tags.filter(
       (tag) =>
         !question.tags.some((t: ITagDoc) =>
-          t.name.toLowerCase().includes(tag.toLowerCase())
-        )
+          t.name.toLowerCase().includes(tag.toLowerCase()),
+        ),
     );
     const tagsToRemove = question.tags.filter(
       (tag: ITagDoc) =>
-        !tags.some((t) => t.toLowerCase() === tag.name.toLowerCase())
+        !tags.some((t) => t.toLowerCase() === tag.name.toLowerCase()),
     );
 
     const newTagDocuments = [];
@@ -137,7 +137,7 @@ export async function editQuestion(
         const existingTag = await Tag.findOneAndUpdate(
           { name: { $regex: `^${tag}$`, $options: "i" } },
           { $setOnInsert: { name: tag }, $inc: { questions: 1 } },
-          { upsert: true, new: true, session }
+          { upsert: true, new: true, session },
         );
 
         if (existingTag) {
@@ -157,19 +157,19 @@ export async function editQuestion(
       await Tag.updateMany(
         { _id: { $in: tagIdsToRemove } },
         { $inc: { questions: -1 } },
-        { session }
+        { session },
       );
 
       await TagQuestion.deleteMany(
         { tag: { $in: tagIdsToRemove }, questions: questionId },
-        { session }
+        { session },
       );
 
       question.tags = question.tags.filter(
         (tagId: mongoose.Types.ObjectId) =>
           !tagIdsToRemove.some((id: mongoose.Types.ObjectId) =>
-            id.equals(tagId._id)
-          )
+            id.equals(tagId._id),
+          ),
       );
     }
 
@@ -190,7 +190,7 @@ export async function editQuestion(
 }
 
 export async function getQuestion(
-  params: GetQuestionParams
+  params: GetQuestionParams,
 ): Promise<ActionResponse<Question1>> {
   const validatedResult = await action({
     params,
@@ -217,7 +217,7 @@ export async function getQuestion(
 }
 
 export async function getQuestions(
-  params: PaginatedSearchParams
+  params: PaginatedSearchParams,
 ): Promise<ActionResponse<{ questions: Question1[]; isNext: boolean }>> {
   const validationResult = await action({
     params,
@@ -277,7 +277,7 @@ export async function getQuestions(
 }
 
 export async function incrementViews(
-  params: IncrementViewsParams
+  params: IncrementViewsParams,
 ): Promise<ActionResponse<{ views: number }>> {
   const validationResult = await action({
     params,

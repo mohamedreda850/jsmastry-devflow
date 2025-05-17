@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { useEffect } from "react";
 import { incrementViews } from "@/lib/actions/question.action";
@@ -19,4 +19,4 @@ const View = ({ questionId }: { questionId: string }) => {
   return null;
 };
 
-export default View; 
+export default View;
