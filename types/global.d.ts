@@ -1,3 +1,4 @@
+import { createAnswer } from '@/lib/actions/answer.action';
 import { NextResponse } from "next/server";
 
 interface Tag {
@@ -47,4 +48,12 @@ interface PaginatedSearchParams {
   query?: AbsoluteString;
   filter?: string;
   sort?: string;
+}
+
+
+interface Answer{
+  _id: string;
+  author: Author;
+  content: string;
+  createdAt: Date;
 }

@@ -13,6 +13,7 @@ import { MDXRemote } from "next-mdx-remote/rsc";
 import { getQuestion, incrementViews } from "@/lib/actions/question.action";
 import { redirect } from "next/navigation";
 import AnswerForm from "@/components/forms/AnswerForm";
+import { getAnswers } from "@/lib/actions/answer.action";
 
 Code.theme = {
   light: "github-light",
@@ -28,6 +29,10 @@ const QuestionDetails = async ({ params }: RouteParams) => {
   ]);
 
   if (!success || !question) return redirect("/404");
+
+  const {success: araAnswersLoaded, data: answersResults, error: answersError} = await getAnswers({questionId: id, page : 1, pageSize : 10, filter:'latest' })
+  console.log("ANSWERS RESULTS", answersResults);
+  
   const { author, createdAt, answers, view, tags, title, content } = question;
   const formattedContent = content.replace(/\\/g, "").replace(/&#x20;/g, "");
 
