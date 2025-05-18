@@ -12,18 +12,20 @@ import {
   FormItem,
   FormMessage,
 } from "@/components/ui/form";
-import { useRef, useState } from "react";
+import { useRef, useState, useTransition } from "react";
 import { AnswerSchema } from "@/lib/vaildations";
 import dynamic from "next/dynamic";
 import { MDXEditorMethods } from "@mdxeditor/editor";
 import { Loader2 } from "lucide-react";
 import Image from "next/image";
+import { createAnswer } from "@/lib/actions/answer.action";
+import { toast } from "@/hooks/use-toast";
 const Editor = dynamic(() => import("@/components/editor"), {
   ssr: false,
 });
 
-const AnswerForm = () => {
-  const [isSubmiting, setIsSubmiting] = useState(false);
+const AnswerForm = ({questionId}: {questionId: string}) => {
+    const [isAnswering, startAnsweringTransition] = useTransition();
   const [isAISubmiting, setIsAISubmiting] = useState(false);
 
   const editorRef = useRef<MDXEditorMethods>(null);
@@ -36,13 +38,34 @@ const AnswerForm = () => {
   });
 
   const handleSubmit = async (values: z.infer<typeof AnswerSchema>) => {
-    console.log(values);
+    startAnsweringTransition(async ()=>{
+        const result = await createAnswer({questionId, content: values.content});
+        if(result.success){
+            form.reset();
+        toast({
+            title: "Success",
+            description: "Your answer has been posted successfully",
+        })
+    }else{
+        toast({
+            title: "Error",
+            description: result?.error?.message || "Something went wrong",
+            variant: "destructive",
+        })
+    }
+    })
+        
   };
   return (
     <div>
       <div className="flex flex-col justify-between gap-5 sm:flex-row sm:items-center sm:gap-2">
-        <h4 className="paragraph-semibold text-dark400_light800">Write your answer here</h4>
-        <Button className="btn light-border-2 gap-1.5 rounded-md border px-2.5 text-primary-500 shadow-none dark:text-primary-500" disabled={isAISubmiting}>
+        <h4 className="paragraph-semibold text-dark400_light800">
+          Write your answer here
+        </h4>
+        <Button
+          className="btn light-border-2 gap-1.5 rounded-md border px-2.5 text-primary-500 shadow-none dark:text-primary-500"
+          disabled={isAISubmiting}
+        >
           {isAISubmiting ? (
             <>
               <Loader2 className="mr-2 size-4 animate-ping" /> Generating...
@@ -85,7 +108,7 @@ const AnswerForm = () => {
           />
           <div className="flex justify-end">
             <Button type="submit" className="primary-gradient w-fit">
-              {isSubmiting ? (
+              {isAnswering ? (
                 <>
                   <Loader2 className="mr-2 size-4 animate-ping" /> Posting...
                 </>
