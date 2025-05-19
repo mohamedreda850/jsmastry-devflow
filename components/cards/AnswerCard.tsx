@@ -50,9 +50,12 @@ const AnswerCard = ({ _id, content, createdAt, author }: Answer) => {
             href={ROUTES.PROFILE(author._id)}
             className="flex flex-col max-sm:ml-1 sm:flex-row sm:items-center"
           >
-            <p className="body-semibold text-dark300_light700">{author.name ?? "Anonymous"}</p>
-            <p className="small-regular text-light400_light500 ml-0.5 line-clamp-1"><span className="max-sm:hidden">&bull;</span>
-            answered {getTimeStamp(createdAt)}
+            <p className="body-semibold text-dark300_light700">
+              {author.name ?? "Anonymous"}
+            </p>
+            <p className="small-regular text-light400_light500 ml-0.5 line-clamp-1">
+              <span className="max-sm:hidden">&bull;</span>
+              answered {getTimeStamp(createdAt)}
             </p>
           </Link>
         </div>

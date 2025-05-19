@@ -1,4 +1,3 @@
-import { createAnswer } from "@/lib/actions/answer.action";
 import { NextResponse } from "next/server";
 
 interface Tag {
