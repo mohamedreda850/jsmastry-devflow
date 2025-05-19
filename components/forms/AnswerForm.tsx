@@ -24,8 +24,8 @@ const Editor = dynamic(() => import("@/components/editor"), {
   ssr: false,
 });
 
-const AnswerForm = ({questionId}: {questionId: string}) => {
-    const [isAnswering, startAnsweringTransition] = useTransition();
+const AnswerForm = ({ questionId }: { questionId: string }) => {
+  const [isAnswering, startAnsweringTransition] = useTransition();
   const [isAISubmiting, setIsAISubmiting] = useState(false);
 
   const editorRef = useRef<MDXEditorMethods>(null);
@@ -38,23 +38,25 @@ const AnswerForm = ({questionId}: {questionId: string}) => {
   });
 
   const handleSubmit = async (values: z.infer<typeof AnswerSchema>) => {
-    startAnsweringTransition(async ()=>{
-        const result = await createAnswer({questionId, content: values.content});
-        if(result.success){
-            form.reset();
+    startAnsweringTransition(async () => {
+      const result = await createAnswer({
+        questionId,
+        content: values.content,
+      });
+      if (result.success) {
+        form.reset();
         toast({
-            title: "Success",
-            description: "Your answer has been posted successfully",
-        })
-    }else{
+          title: "Success",
+          description: "Your answer has been posted successfully",
+        });
+      } else {
         toast({
-            title: "Error",
-            description: result?.error?.message || "Something went wrong",
-            variant: "destructive",
-        })
-    }
-    })
-        
+          title: "Error",
+          description: result?.error?.message || "Something went wrong",
+          variant: "destructive",
+        });
+      }
+    });
   };
   return (
     <div>

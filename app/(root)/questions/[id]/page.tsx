@@ -14,6 +14,7 @@ import { getQuestion, incrementViews } from "@/lib/actions/question.action";
 import { redirect } from "next/navigation";
 import AnswerForm from "@/components/forms/AnswerForm";
 import { getAnswers } from "@/lib/actions/answer.action";
+import AllAnswers from "@/components/answers/AllAnswers";
 
 Code.theme = {
   light: "github-light",
@@ -30,9 +31,17 @@ const QuestionDetails = async ({ params }: RouteParams) => {
 
   if (!success || !question) return redirect("/404");
 
-  const {success: araAnswersLoaded, data: answersResults, error: answersError} = await getAnswers({questionId: id, page : 1, pageSize : 10, filter:'latest' })
-  console.log("ANSWERS RESULTS", answersResults);
-  
+  const {
+    success: araAnswersLoaded,
+    data: answersResults,
+    error: answersError,
+  } = await getAnswers({
+    questionId: id,
+    page: 1,
+    pageSize: 10,
+    filter: "latest",
+  });
+
   const { author, createdAt, answers, view, tags, title, content } = question;
   const formattedContent = content.replace(/\\/g, "").replace(/&#x20;/g, "");
 
@@ -103,8 +112,16 @@ const QuestionDetails = async ({ params }: RouteParams) => {
           <TagCards key={tag._id} _id={tag._id} name={tag.name} compact />
         ))}
       </div>
+      <section className="my-5">
+        <AllAnswers
+          data={answersResults?.answers}
+          success={araAnswersLoaded}
+          error={answersError}
+          totalAnswers={answersResults?.totalAnswers || 0}
+        />
+      </section>
       <section className="mt-5">
-        <AnswerForm questionId={question._id}/>
+        <AnswerForm questionId={question._id} />
       </section>
     </>
   );

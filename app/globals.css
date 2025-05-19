@@ -261,7 +261,11 @@
   .btn {
     @apply bg-light-800 dark:bg-dark-300 !important;
   }
-
+  .hash-span {
+    margin-top: -140px;
+    padding-bottom: 140px;
+    display: block;
+  }
   .btn-secondary {
     @apply bg-light-800 dark:bg-dark-400 !important;
   }

@@ -1,4 +1,4 @@
-import { createAnswer } from '@/lib/actions/answer.action';
+import { createAnswer } from "@/lib/actions/answer.action";
 import { NextResponse } from "next/server";
 
 interface Tag {
@@ -50,8 +50,7 @@ interface PaginatedSearchParams {
   sort?: string;
 }
 
-
-interface Answer{
+interface Answer {
   _id: string;
   author: Author;
   content: string;

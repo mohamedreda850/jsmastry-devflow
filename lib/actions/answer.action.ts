@@ -4,7 +4,11 @@ import mongoose from "mongoose";
 
 import Answer, { IAnswerDoc } from "@/database/answer.model";
 import { CreateAnswerParams, GetAnswerParams } from "@/types/action";
-import { ActionResponse, Answer as AnswerType, ErrorResponse } from "@/types/global";
+import {
+  ActionResponse,
+  Answer as AnswerType,
+  ErrorResponse,
+} from "@/types/global";
 import action from "../handlers/action";
 import handleError from "../handlers/error";
 import { Question } from "@/database";
@@ -12,7 +16,7 @@ import { revalidatePath } from "next/cache";
 import ROUTES from "@/constants/routes";
 
 export async function createAnswer(
-  params: CreateAnswerParams
+  params: CreateAnswerParams,
 ): Promise<ActionResponse<IAnswerDoc>> {
   const validationResult = await action({
     params,
@@ -38,7 +42,7 @@ export async function createAnswer(
           content,
         },
       ],
-      { session }
+      { session },
     );
     if (!newAnswer) throw new Error("Failed to create answer");
     question.answers += 1;
@@ -58,7 +62,7 @@ export async function createAnswer(
 }
 
 export const getAnswers = async (
-  params: GetAnswerParams
+  params: GetAnswerParams,
 ): Promise<
   ActionResponse<{
     answers: AnswerType[];
@@ -98,7 +102,7 @@ export const getAnswers = async (
 
   try {
     const totalAnswers = await Answer.countDocuments({ question: questionId });
-    const answers =await Answer.find({ question: questionId })
+    const answers = await Answer.find({ question: questionId })
       .populate("author", "name image _id")
       .sort(sortCriteria)
       .skip(skip)
