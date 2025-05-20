@@ -30,10 +30,10 @@ const Votes = ({ upvotes, hasupVoted, downvotes, hasdownVoted }: Params) => {
         voteType === "upvote"
           ? `Upvote${!hasupVoted ? "added" : "removed"}`
           : `Downvote${!hasdownVoted ? "added" : "removed"}`;
-          toast({
-            title:successMessage,
-            description: "Your vote has been successfully registered",
-          })
+      toast({
+        title: successMessage,
+        description: "Your vote has been successfully registered",
+      });
     } catch {
       toast({
         title: "Failed to vote",
