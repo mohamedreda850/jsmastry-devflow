@@ -80,7 +80,7 @@ const AnswerForm = ({ questionId, questionTitle, questionContent }: Props) => {
       });
     }
     setIsAISubmiting(true);
-const userAnswer = editorRef?.current?.getMarkdown();
+    const userAnswer = editorRef?.current?.getMarkdown();
 
     try {
       const { success, data, error } = await api.ai.getAnswer(
