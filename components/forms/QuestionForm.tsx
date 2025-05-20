@@ -163,7 +163,7 @@ const QuestionForm = ({ question, isEdit = false }: Params) => {
                 <Editor
                   value={field.value}
                   fieldChange={field.onChange}
-                  editorRef={editorRef}
+                  ref={editorRef}
                 />
               </FormControl>
               <FormDescription className="body-regular mt-2.5 text-light-500">
