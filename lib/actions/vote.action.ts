@@ -1,10 +1,15 @@
 "use server";
 
 import mongoose, { ClientSession } from "mongoose";
-import { CreateVoteParams, UpdateVoteCountParams } from "@/types/action";
+import {
+  CreateVoteParams,
+  HasVotedParams,
+  HasVotedResponse,
+  UpdateVoteCountParams,
+} from "@/types/action";
 import { ActionResponse, ErrorResponse } from "@/types/global";
 import action from "../handlers/action";
-import { CreateVoteSchema, UpdateVoteCountSchema } from "../vaildations";
+import { CreateVoteSchema, HasVotedSchema, UpdateVoteCountSchema } from "../vaildations";
 import handleError from "../handlers/error";
 import { Question, Vote } from "@/database";
 import Answer from "@/database/answer.model";
@@ -42,7 +47,9 @@ export async function updateVoteCount(
   }
 }
 
-export async function createVote(params: CreateVoteParams): Promise<ActionResponse> {
+export async function createVote(
+  params: CreateVoteParams,
+): Promise<ActionResponse> {
   const validationResult = await action({
     params,
     schema: CreateVoteSchema,
@@ -104,4 +111,44 @@ export async function createVote(params: CreateVoteParams): Promise<ActionRespon
     session.endSession();
     return handleError(error as Error) as ErrorResponse;
   }
+}
+
+export async function hasVoted(
+  params: HasVotedParams,
+): Promise<ActionResponse<HasVotedResponse>> {
+    const validationResults = await action({
+        params,
+        schema: HasVotedSchema,
+        authorize: true,
+    });
+    if(validationResults instanceof Error)
+        return handleError(validationResults) as ErrorResponse;
+
+    const {targetId, targetType} = validationResults.params!;
+    const userId = validationResults.session?.user?.id;
+
+    try {
+        const vote = await Vote.findOne({
+            author:userId,
+            actionId: targetId,
+            actionType: targetType,
+        });
+        if(!vote){
+            return {
+                success: false,
+                data: {hasUpvoted: false, hasDownvoted: false},
+            };
+        }
+        return {
+            success: true,
+            data: {
+                hasUpvoted: vote.voteType === "upvote",
+                hasDownvoted: vote.voteType === "downvote",
+            },
+        };
+    } catch (error) {
+        return handleError(error) as ErrorResponse;
+    }
+    
+    
 }
