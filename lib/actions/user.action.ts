@@ -38,6 +38,7 @@ export async function getUsers(params: PaginatedSearchParams): Promise<
     filterQuery.$or = [
       { name: { $regex: query, $options: "i" } },
       { email: { $regex: query, $options: "i" } },
+      { username: { $regex: query, $options: "i" } },
     ];
   }
 
