@@ -19,6 +19,7 @@ import Votes from "@/components/votes/votes";
 import { hasVoted } from "@/lib/actions/vote.action";
 import { Suspense } from "react";
 import SaveQuestion from "@/components/questions/SaveQuestion";
+import { hasSavedAction } from "@/lib/actions/collection.action";
 
 Code.theme = {
   light: "github-light",
@@ -50,7 +51,7 @@ const QuestionDetails = async ({ params }: RouteParams) => {
     targetId: question._id,
     targetType: "question",
   });
-
+const hasSavedQuestionPomise = hasSavedAction({questionId: question._id})
   const { author, createdAt, answers, view, tags, title, content } = question;
   const formattedContent = content.replace(/\\/g, "").replace(/&#x20;/g, "");
 
@@ -71,7 +72,7 @@ const QuestionDetails = async ({ params }: RouteParams) => {
               </p>
             </Link>
           </div>
-          <div className="flex justify-end">
+          <div className="flex justify-end items-center gap-4">
             <Suspense fallback={<div>Loading...</div>}>
               <Votes
                 upvotes={question.upvotes}
@@ -82,7 +83,7 @@ const QuestionDetails = async ({ params }: RouteParams) => {
               />
             </Suspense>
             <Suspense fallback={<div>Loading...</div>}>
-              <SaveQuestion questionId={question._id} />
+              <SaveQuestion questionId={question._id} hasSavedQuestionPomise={hasSavedQuestionPomise}/>
             </Suspense>
           </div>
         </div>

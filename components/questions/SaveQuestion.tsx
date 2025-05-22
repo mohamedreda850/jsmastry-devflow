@@ -2,15 +2,18 @@
 
 import { useSession } from "next-auth/react";
 import Image from "next/image";
-import { useState } from "react";
+import { use, useState } from "react";
 import starImage from './../../public/icons/star-filled.svg'
 import starRedImage from './../../public/icons/star-red.svg'
 import { toast } from "@/hooks/use-toast";
 import { togaleSaveQuestion } from "@/lib/actions/collection.action";
-const SaveQuestion = ({questionId}: {questionId: string}) => {
+import { ActionResponse } from "@/types/global";
+const SaveQuestion = ({questionId, hasSavedQuestionPomise}: {questionId: string, hasSavedQuestionPomise: Promise<ActionResponse<{saved: boolean}>>}) => {
     const session = useSession();
     const userId = session?.data?.user?.id;
+    const {data} = use(hasSavedQuestionPomise)
 
+    const {saved: hasSaved} = data || {}
     const [isLoading, setIsLoading] = useState(false)
 
     const handelSave = async () => {
@@ -42,7 +45,6 @@ const SaveQuestion = ({questionId}: {questionId: string}) => {
         }
     }
 
-    const hasSaved = false ;
   return (
     <Image
     src={hasSaved ?  starImage:  starRedImage}
