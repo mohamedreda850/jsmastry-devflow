@@ -1,11 +1,13 @@
 import { Answer } from "@/types/global";
-import React from "react";
+import React, { Suspense } from "react";
 import UserAvatar from "../userAvatar";
 import Link from "next/link";
 import ROUTES from "@/constants/routes";
 import { getTimeStamp } from "@/lib/utils";
 import { Code } from "bright";
 import { MDXRemote } from "next-mdx-remote/rsc";
+import Votes from "../votes/votes";
+import { hasVoted } from "@/lib/actions/vote.action";
 
 Code.theme = {
   light: "github-light",
@@ -34,7 +36,9 @@ const Preview = ({ content }: { content: string }) => {
   );
 };
 
-const AnswerCard = ({ _id, content, createdAt, author }: Answer) => {
+const AnswerCard = ({ _id, content, createdAt, author, upvotes, downvotes }: Answer) => {
+
+  const hasVotedPromise = hasVoted({targetId: _id, targetType: "answer"})
   return (
     <article className="light-border border-b py-10">
       <span id={JSON.stringify(_id)} className="hash-span" />
@@ -59,7 +63,17 @@ const AnswerCard = ({ _id, content, createdAt, author }: Answer) => {
             </p>
           </Link>
         </div>
-        <div className="flex justify-end">Votes</div>
+        <div className="flex justify-end">
+            <Suspense fallback={<div>Loading...</div>}>
+            <Votes
+              upvotes={upvotes}
+              targetType="answer"
+              targetId={_id}
+              downvotes={downvotes}
+              hasVotedPromise={hasVotedPromise}
+            />
+            </Suspense>
+          </div>
       </div>
       <Preview content={content} />
     </article>
