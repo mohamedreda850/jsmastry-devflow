@@ -10,6 +10,7 @@ const ROUTES = {
   QUESTION: (id: string) => `/questions/${id}`,
   PROFILE: (id: string) => `profile/${id}`,
   TAG: (id: string) => `tags/${id}`,
+  
 };
 
 export default ROUTES;
