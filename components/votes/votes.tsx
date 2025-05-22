@@ -16,15 +16,21 @@ interface Params {
   targetId: string;
   upvotes: number;
   downvotes: number;
-  hasVotedPromise: Promise<ActionResponse<HasVotedResponse>>
+  hasVotedPromise: Promise<ActionResponse<HasVotedResponse>>;
 }
-const Votes = ({ upvotes,  downvotes,  hasVotedPromise, targetType, targetId}: Params) => {
+const Votes = ({
+  upvotes,
+  downvotes,
+  hasVotedPromise,
+  targetType,
+  targetId,
+}: Params) => {
   const session = useSession();
   const userId = session.data?.user?.id;
 
-  const {success, data} = use(hasVotedPromise)
+  const { success, data } = use(hasVotedPromise);
   const [isLoading, setIsLoading] = useState(false);
-  const {hasUpvoted, hasDownvoted} = data || {}
+  const { hasUpvoted, hasDownvoted } = data || {};
   const handleVote = async (voteType: "upvote" | "downvote") => {
     if (!userId)
       return toast({
@@ -33,19 +39,20 @@ const Votes = ({ upvotes,  downvotes,  hasVotedPromise, targetType, targetId}: P
       });
     setIsLoading(true);
     try {
-
-        const results = await createVote({
-            targetId,
-            targetType,
-            voteType,
-        })
-        if(!results.success){
-            toast({
-                title: "Failed to vote",
-                description: results.error?.message || "An error occurred while voting. Please try again later.",
-                variant: "destructive",
-              });
-        }
+      const results = await createVote({
+        targetId,
+        targetType,
+        voteType,
+      });
+      if (!results.success) {
+        toast({
+          title: "Failed to vote",
+          description:
+            results.error?.message ||
+            "An error occurred while voting. Please try again later.",
+          variant: "destructive",
+        });
+      }
       const successMessage =
         voteType === "upvote"
           ? `Upvote${!hasUpvoted ? "added" : "removed"}`

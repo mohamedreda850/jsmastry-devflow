@@ -32,8 +32,6 @@ const QuestionDetails = async ({ params }: RouteParams) => {
     await getQuestion({ questionId: id }),
   ]);
 
-
-
   if (!success || !question) return redirect("/404");
 
   const {
@@ -47,7 +45,10 @@ const QuestionDetails = async ({ params }: RouteParams) => {
     filter: "latest",
   });
 
-  const hasVotedPromise = hasVoted({targetId: question._id, targetType: "question"})
+  const hasVotedPromise = hasVoted({
+    targetId: question._id,
+    targetType: "question",
+  });
 
   const { author, createdAt, answers, view, tags, title, content } = question;
   const formattedContent = content.replace(/\\/g, "").replace(/&#x20;/g, "");
@@ -71,13 +72,13 @@ const QuestionDetails = async ({ params }: RouteParams) => {
           </div>
           <div className="flex justify-end">
             <Suspense fallback={<div>Loading...</div>}>
-            <Votes
-              upvotes={question.upvotes}
-              targetType="question"
-              targetId={question._id}
-              downvotes={question.downvotes}
-              hasVotedPromise={hasVotedPromise}
-            />
+              <Votes
+                upvotes={question.upvotes}
+                targetType="question"
+                targetId={question._id}
+                downvotes={question.downvotes}
+                hasVotedPromise={hasVotedPromise}
+              />
             </Suspense>
           </div>
         </div>

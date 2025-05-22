@@ -36,9 +36,15 @@ const Preview = ({ content }: { content: string }) => {
   );
 };
 
-const AnswerCard = ({ _id, content, createdAt, author, upvotes, downvotes }: Answer) => {
-
-  const hasVotedPromise = hasVoted({targetId: _id, targetType: "answer"})
+const AnswerCard = ({
+  _id,
+  content,
+  createdAt,
+  author,
+  upvotes,
+  downvotes,
+}: Answer) => {
+  const hasVotedPromise = hasVoted({ targetId: _id, targetType: "answer" });
   return (
     <article className="light-border border-b py-10">
       <span id={JSON.stringify(_id)} className="hash-span" />
@@ -64,7 +70,7 @@ const AnswerCard = ({ _id, content, createdAt, author, upvotes, downvotes }: Ans
           </Link>
         </div>
         <div className="flex justify-end">
-            <Suspense fallback={<div>Loading...</div>}>
+          <Suspense fallback={<div>Loading...</div>}>
             <Votes
               upvotes={upvotes}
               targetType="answer"
@@ -72,8 +78,8 @@ const AnswerCard = ({ _id, content, createdAt, author, upvotes, downvotes }: Ans
               downvotes={downvotes}
               hasVotedPromise={hasVotedPromise}
             />
-            </Suspense>
-          </div>
+          </Suspense>
+        </div>
       </div>
       <Preview content={content} />
     </article>

@@ -22,7 +22,7 @@ import handleError from "../handlers/error";
 
 export async function updateVoteCount(
   params: UpdateVoteCountParams,
-  session?: ClientSession
+  session?: ClientSession,
 ): Promise<ActionResponse> {
   const validationResult = await action({
     params,
@@ -42,12 +42,12 @@ export async function updateVoteCount(
     const result = await Model.findByIdAndUpdate(
       targetId,
       { $inc: { [voteField]: change } },
-      { new: true, session }
+      { new: true, session },
     );
 
     if (!result)
       return handleError(
-        new Error("Failed to update vote count")
+        new Error("Failed to update vote count"),
       ) as ErrorResponse;
 
     return { success: true };
@@ -57,7 +57,7 @@ export async function updateVoteCount(
 }
 
 export async function createVote(
-  params: CreateVoteParams
+  params: CreateVoteParams,
 ): Promise<ActionResponse> {
   const validationResult = await action({
     params,
@@ -90,21 +90,21 @@ export async function createVote(
         await Vote.deleteOne({ _id: existingVote._id }).session(session);
         await updateVoteCount(
           { targetId, targetType, voteType, change: -1 },
-          session
+          session,
         );
       } else {
         await Vote.findByIdAndUpdate(
           existingVote._id,
           { voteType },
-          { new: true, session }
+          { new: true, session },
         );
         await updateVoteCount(
           { targetId, targetType, voteType: existingVote.voteType, change: -1 },
-          session
+          session,
         );
         await updateVoteCount(
           { targetId, targetType, voteType, change: 1 },
-          session
+          session,
         );
       }
     } else {
@@ -119,11 +119,11 @@ export async function createVote(
         ],
         {
           session,
-        }
+        },
       );
       await updateVoteCount(
         { targetId, targetType, voteType, change: 1 },
-        session
+        session,
       );
     }
 
@@ -141,7 +141,7 @@ export async function createVote(
 }
 
 export async function hasVoted(
-  params: HasVotedParams
+  params: HasVotedParams,
 ): Promise<ActionResponse<HasVotedResponse>> {
   const validationResult = await action({
     params,
