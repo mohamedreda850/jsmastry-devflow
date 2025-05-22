@@ -18,6 +18,7 @@ import AllAnswers from "@/components/answers/AllAnswers";
 import Votes from "@/components/votes/votes";
 import { hasVoted } from "@/lib/actions/vote.action";
 import { Suspense } from "react";
+import SaveQuestion from "@/components/questions/SaveQuestion";
 
 Code.theme = {
   light: "github-light",
@@ -79,6 +80,9 @@ const QuestionDetails = async ({ params }: RouteParams) => {
                 downvotes={question.downvotes}
                 hasVotedPromise={hasVotedPromise}
               />
+            </Suspense>
+            <Suspense fallback={<div>Loading...</div>}>
+              <SaveQuestion questionId={question._id} />
             </Suspense>
           </div>
         </div>
