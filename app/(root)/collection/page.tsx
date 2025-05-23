@@ -2,7 +2,7 @@ import LocalSearch from "@/components/search/LocalSearch";
 import searchImage from "./../../../public/icons/search.svg";
 import QuestionCard from "@/components/cards/QuestionCard";
 import DataRenderer from "@/components/DataRenderer";
-import { EMPTY_QUESTION } from "@/constants/states";
+import {  EMPTY_SAVED_QUESTIONS } from "@/constants/states";
 import { getSavedQuestions } from "@/lib/actions/collection.action";
 import ROUTES from "@/constants/routes";
 
@@ -38,7 +38,7 @@ const Collections = async ({ searchParams }: SearchParams) => {
         success={success}
         error={error || { message: "An unknown error occurred." }}
         data={collections}
-        empty={EMPTY_QUESTION}
+        empty={EMPTY_SAVED_QUESTIONS}
         render={(collections) => (
           <div className="mt-10 flex w-full flex-col gap-6">
             {collections.map((item) => (

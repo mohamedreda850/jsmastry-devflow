@@ -61,3 +61,11 @@ export const EMPTY_USERS = {
   title: "No Users Found",
   message: "You're ALONE. The only one here. More users are coming soon!",
 };
+export const EMPTY_SAVED_QUESTIONS = {
+  title: "No Saved Questions",
+  message: "You haven't saved any questions yet. Start saving some!",
+  button: {
+    text: "Explore Questions",
+    href: ROUTES.HOME,
+  },
+};
