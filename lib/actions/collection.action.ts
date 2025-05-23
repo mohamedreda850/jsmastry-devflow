@@ -19,7 +19,7 @@ import ROUTES from "@/constants/routes";
 import mongoose, { PipelineStage } from "mongoose";
 
 export async function togaleSaveQuestion(
-  params: CollectionBaseParams
+  params: CollectionBaseParams,
 ): Promise<ActionResponse<{ saved: boolean }>> {
   const validationResult = await action({
     params,
@@ -75,7 +75,7 @@ export async function togaleSaveQuestion(
 }
 
 export async function hasSavedAction(
-  params: CollectionBaseParams
+  params: CollectionBaseParams,
 ): Promise<ActionResponse<{ saved: boolean }>> {
   const validationResult = await action({
     params,
