@@ -12,6 +12,7 @@ import handleError from "../handlers/error";
 import { FilterQuery } from "mongoose";
 import { Question, User as UserModel } from "@/database";
 import Answer from "@/database/answer.model";
+import { GetUserParams } from "@/types/action";
 
 export async function getUsers(params: PaginatedSearchParams): Promise<
   ActionResponse<{
@@ -82,7 +83,7 @@ export async function getUsers(params: PaginatedSearchParams): Promise<
   }
 }
 
-export const getUser = async (params: GetUserParams): Promise<ActionResponse<{user: UserModel, totalQuestions: number, totalAnswers: number}>> => {
+export const getUser = async (params: GetUserParams): Promise<ActionResponse<{user: User, totalQuestions: number, totalAnswers: number}>> => {
 
   const validationResult = action({
     params,
