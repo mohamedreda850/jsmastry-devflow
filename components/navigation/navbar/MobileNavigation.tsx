@@ -26,7 +26,7 @@ const MobileNavigation = async () => {
           width={36}
           height={36}
           alt="Menue"
-          className="invert-colors sm:hidden"
+          className="invert-colors sm:hidden cursor-pointer"
         />
       </SheetTrigger>
       <SheetContent side="left" className="background-light900_dark200">
