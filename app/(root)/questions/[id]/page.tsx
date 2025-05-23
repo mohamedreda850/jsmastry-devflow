@@ -51,7 +51,7 @@ const QuestionDetails = async ({ params }: RouteParams) => {
     targetId: question._id,
     targetType: "question",
   });
-const hasSavedQuestionPomise = hasSavedAction({questionId: question._id})
+  const hasSavedQuestionPomise = hasSavedAction({ questionId: question._id });
   const { author, createdAt, answers, view, tags, title, content } = question;
   const formattedContent = content.replace(/\\/g, "").replace(/&#x20;/g, "");
 
@@ -83,7 +83,10 @@ const hasSavedQuestionPomise = hasSavedAction({questionId: question._id})
               />
             </Suspense>
             <Suspense fallback={<div>Loading...</div>}>
-              <SaveQuestion questionId={question._id} hasSavedQuestionPomise={hasSavedQuestionPomise}/>
+              <SaveQuestion
+                questionId={question._id}
+                hasSavedQuestionPomise={hasSavedQuestionPomise}
+              />
             </Suspense>
           </div>
         </div>
