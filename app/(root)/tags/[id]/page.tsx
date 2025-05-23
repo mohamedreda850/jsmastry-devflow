@@ -6,6 +6,7 @@ import { EMPTY_QUESTION } from "@/constants/states";
 import { getTagQuestions } from "@/lib/actions/tag.action";
 import { RouteParams } from "@/types/global";
 import searchImage from "./../../../../public/icons/search.svg";
+import Pagination from "@/components/Pagination";
 
 
 const page = async ({ params, searchParams }: RouteParams) => {
@@ -17,7 +18,7 @@ const page = async ({ params, searchParams }: RouteParams) => {
     pageSize: Number(pageSize) || 10,
     query,
   });
-  const { tag, questions } = data || {};
+  const { tag, questions, isNext } = data || {};
   return (
     <>
       <section className="flex w-full flex-col-reverse justify-between gap-4 sm:flex-row sm:items-center">
@@ -45,6 +46,7 @@ const page = async ({ params, searchParams }: RouteParams) => {
           </div>
         )}
       />
+      <Pagination page={page} isNext={isNext || false}/>
     </>
   );
 };
