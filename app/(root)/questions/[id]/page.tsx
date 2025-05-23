@@ -26,14 +26,14 @@ Code.theme = {
   dark: "github-dark",
   lightSelector: "html.light",
 };
-const QuestionDetails = async ({ params }: RouteParams) => {
+const QuestionDetails = async ({ params, searchParams }: RouteParams) => {
   const { id } = await params;
   // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
   const [_, { success, data: question }] = await Promise.all([
     await incrementViews({ questionId: id }),
     await getQuestion({ questionId: id }),
   ]);
-
+  const { page, pageSize, filter } = await searchParams;
   if (!success || !question) return redirect("/404");
 
   const {
@@ -42,9 +42,9 @@ const QuestionDetails = async ({ params }: RouteParams) => {
     error: answersError,
   } = await getAnswers({
     questionId: id,
-    page: 1,
-    pageSize: 10,
-    filter: "latest",
+    page: Number(page) || 1,
+    pageSize: Number(pageSize) || 10,
+    filter
   });
 
   const hasVotedPromise = hasVoted({

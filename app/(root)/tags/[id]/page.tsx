@@ -7,6 +7,7 @@ import { getTagQuestions } from "@/lib/actions/tag.action";
 import { RouteParams } from "@/types/global";
 import searchImage from "./../../../../public/icons/search.svg";
 
+
 const page = async ({ params, searchParams }: RouteParams) => {
   const { id } = await params;
   const { page, pageSize, query } = await searchParams;
@@ -19,17 +20,18 @@ const page = async ({ params, searchParams }: RouteParams) => {
   const { tag, questions } = data || {};
   return (
     <>
-      <section className="w-full flex flex-col-reverse sm:flex-row justify-between gap-4 sm:items-center">
+      <section className="flex w-full flex-col-reverse justify-between gap-4 sm:flex-row sm:items-center">
         <h1 className="h1-bold text-dark100_light900">{tag?.name}</h1>
       </section>
-      <section className="mt-11">
+      <div className="mt-11 flex justify-between gap-5 max-sm:flex-col sm:items-center">
         <LocalSearch
           route={ROUTES.TAG(id)}
           imgSrc={searchImage}
           placeHolder="Search questions..."
           otherClasses="flex-1"
         />
-      </section>
+      
+      </div>
       <DataRenderer
         success={success}
         error={error || { message: "An unknown error occurred." }}
