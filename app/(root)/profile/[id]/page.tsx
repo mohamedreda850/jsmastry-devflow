@@ -1,7 +1,7 @@
 import { auth } from "@/Auth";
 import ProfileLink from "@/components/user/ProfileLink";
 import UserAvatar from "@/components/userAvatar";
-import { getUser, getUserAnswers, getUserQuestions } from "@/lib/actions/user.action";
+import { getUser, getUserAnswers, getUserQuestions, getUserTopTags } from "@/lib/actions/user.action";
 import { RouteParams } from "@/types/global";
 import { notFound } from "next/navigation";
 import linkIcon from "./../../../../public/icons/link.svg";
@@ -18,6 +18,7 @@ import { EMBTY_ANSWERS, EMPTY_QUESTION } from "@/constants/states";
 import QuestionCard from "@/components/cards/QuestionCard";
 import Pagination from "@/components/Pagination";
 import AnswerCard from "@/components/cards/AnswerCard";
+import TagCards from "@/components/cards/TagCard";
 const Profile = async ({ params, searchParams }: RouteParams) => {
   const { id } = await params;
   const { page = 1, pageSize = 10 } = await searchParams;
@@ -40,6 +41,9 @@ const {success: userQuestionsSuccess, data: userQuestions, error: userQuestionsE
   page: Number(page) || 1,
   pageSize: Number(pageSize) || 10,
 })
+const {success: userTopTagsSuccess, data: userTopTags, error: userTopTagsError} = await getUserTopTags({
+  userId: id,
+})
 
 const {success: userAnswersSuccess, data: userAnswers, error: userAnswersError} = await getUserAnswers({
   userId: id,
@@ -48,6 +52,7 @@ const {success: userAnswersSuccess, data: userAnswers, error: userAnswersError} 
 })
 const {questions, isNext: hasMoreQuestions} = userQuestions!;
 const {answers, isNext: hasMoreAnswers} = userAnswers!;
+const {tags} = userTopTags!;
 
   const {
     _id,
@@ -174,7 +179,26 @@ const {answers, isNext: hasMoreAnswers} = userAnswers!;
         <div className="flex w-full min-w-[250px] flex-1 flex-col max-lg:hidden">
           <h3 className="h3-bold text-dark200_light900">Top Tech</h3>
           <div className="mt-7 flex flex-col gap-4">
-            <p>List of tags</p>
+          <DataRenderer
+            data={tags}
+            empty={EMBTY_ANSWERS}
+            success={userTopTagsSuccess}
+            error={userTopTagsError || { message: "An unknown error occurred" }}
+            render={(tags) => (
+              <div className="mt-3 flex w-full flex-col gap-4">
+               {tags.map((tag)=>(
+                <TagCards
+                key={tag._id}
+                _id={tag._id}
+                name={tag.name}
+                questions={tag.count}
+                showCount
+                compact
+                />
+               ))}
+              </div>
+            )}
+          />
           </div>
         </div>
       </section>
