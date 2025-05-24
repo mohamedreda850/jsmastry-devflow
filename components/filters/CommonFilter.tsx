@@ -1,10 +1,16 @@
 "use client";
 
 import { useRouter, useSearchParams } from "next/navigation";
-import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
 import { cn } from "@/lib/utils";
 import { formUrlQuery } from "@/lib/url";
-
 
 interface Filter {
   name: string;
@@ -28,12 +34,11 @@ const CommonFilter = ({
 
   const handleUpdateParams = (value: string) => {
     const newURL = formUrlQuery({
-        params: searchParams.toString(),
-        key: "filter",
-        value,
+      params: searchParams.toString(),
+      key: "filter",
+      value,
     });
-    router.push(newURL, {scroll: false})
-   
+    router.push(newURL, { scroll: false });
   };
   return (
     <div className={cn("relative", containerClasses)}>
@@ -53,13 +58,13 @@ const CommonFilter = ({
           </div>
         </SelectTrigger>
         <SelectContent>
-            <SelectGroup>
-                {filters.map((item)=>(
-                    <SelectItem key={item.value} value={item.value}>
-                        {item.name}
-                    </SelectItem>
-                ))}
-            </SelectGroup>
+          <SelectGroup>
+            {filters.map((item) => (
+              <SelectItem key={item.value} value={item.value}>
+                {item.name}
+              </SelectItem>
+            ))}
+          </SelectGroup>
         </SelectContent>
       </Select>
     </div>

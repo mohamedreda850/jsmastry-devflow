@@ -34,7 +34,10 @@ const Collections = async ({ searchParams }: SearchParams) => {
           placeHolder="Search questions..."
           otherClasses="flex-1"
         />
-        <CommonFilter filters={CollectionFilters} otherClasses="min-h-[56px] sm:min-w-[170px]" />
+        <CommonFilter
+          filters={CollectionFilters}
+          otherClasses="min-h-[56px] sm:min-w-[170px]"
+        />
       </div>
 
       <DataRenderer
@@ -50,8 +53,7 @@ const Collections = async ({ searchParams }: SearchParams) => {
           </div>
         )}
       />
-            <Pagination page={page} isNext={isNext || false}/>
-
+      <Pagination page={page} isNext={isNext || false} />
     </>
   );
 };

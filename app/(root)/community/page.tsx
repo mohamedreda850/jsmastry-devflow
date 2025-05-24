@@ -31,7 +31,10 @@ const Community = async ({ searchParams }: RouteParams) => {
           placeHolder="There ara some great devs..."
           otherClasses="flex-1"
         />
-         <CommonFilter filters={UserFilters} otherClasses="min-h-[56px] sm:min-w-[170px]" />
+        <CommonFilter
+          filters={UserFilters}
+          otherClasses="min-h-[56px] sm:min-w-[170px]"
+        />
       </div>
       <DataRenderer
         empty={EMPTY_USERS}
@@ -46,7 +49,7 @@ const Community = async ({ searchParams }: RouteParams) => {
           </div>
         )}
       />
-      <Pagination page={page} isNext={isNext || false}/>
+      <Pagination page={page} isNext={isNext || false} />
     </div>
   );
 };

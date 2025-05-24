@@ -84,8 +84,11 @@ export async function getUsers(params: PaginatedSearchParams): Promise<
   }
 }
 
-export const getUser = async (params: GetUserParams): Promise<ActionResponse<{user: User, totalQuestions: number, totalAnswers: number}>> => {
-
+export const getUser = async (
+  params: GetUserParams,
+): Promise<
+  ActionResponse<{ user: User; totalQuestions: number; totalAnswers: number }>
+> => {
   const validationResult = action({
     params,
     schema: GetUserSchema,
@@ -94,20 +97,20 @@ export const getUser = async (params: GetUserParams): Promise<ActionResponse<{us
   if (validationResult instanceof Error)
     return handleError(validationResult) as ErrorResponse;
 
-  const {userId} = params;
+  const { userId } = params;
 
   try {
     const user = await UserModel.findById(userId);
-    if(!user) throw new Error("User not found");
+    if (!user) throw new Error("User not found");
 
     const totalQuestions = await Question.countDocuments({
       author: userId,
     });
     const totalAnswers = await Answer.countDocuments({
       author: userId,
-    })
+    });
 
-    return{
+    return {
       success: true,
       data: {
         user: JSON.parse(JSON.stringify(user)),
@@ -118,6 +121,4 @@ export const getUser = async (params: GetUserParams): Promise<ActionResponse<{us
   } catch (error) {
     return handleError(error) as ErrorResponse;
   }
-    
-}
-
+};

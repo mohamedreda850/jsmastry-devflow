@@ -8,7 +8,6 @@ import { RouteParams } from "@/types/global";
 import searchImage from "./../../../../public/icons/search.svg";
 import Pagination from "@/components/Pagination";
 
-
 const page = async ({ params, searchParams }: RouteParams) => {
   const { id } = await params;
   const { page, pageSize, query } = await searchParams;
@@ -31,7 +30,6 @@ const page = async ({ params, searchParams }: RouteParams) => {
           placeHolder="Search questions..."
           otherClasses="flex-1"
         />
-      
       </div>
       <DataRenderer
         success={success}
@@ -46,7 +44,7 @@ const page = async ({ params, searchParams }: RouteParams) => {
           </div>
         )}
       />
-      <Pagination page={page} isNext={isNext || false}/>
+      <Pagination page={page} isNext={isNext || false} />
     </>
   );
 };

@@ -18,7 +18,7 @@ const Tags = async ({ searchParams }: RouteParams) => {
     query,
     filter,
   });
-  const { tags,isNext} = data || {};
+  const { tags, isNext } = data || {};
   console.log(tags, JSON.stringify(tags, null, 1));
 
   return (
@@ -32,22 +32,25 @@ const Tags = async ({ searchParams }: RouteParams) => {
           iconPosition="left"
           otherClasses="flex-1"
         />
-        <CommonFilter filters={TagFilters} otherClasses="min-h-[56px] sm:min-w-[170px]"/>
-          </div>
-        <DataRenderer
-          success={success}
-          error={error || { message: "An unknown error occurred." }}
-          data={tags}
-          empty={EMPTY_TAGS}
-          render={(tags) => (
-            <div className="mt-10 flex w-full flex-wrap gap-4">
-              {tags.map((tag) => (
-                <TagCards key={tag._id} {...tag} />
-              ))}
-            </div>
-          )}
+        <CommonFilter
+          filters={TagFilters}
+          otherClasses="min-h-[56px] sm:min-w-[170px]"
         />
-        <Pagination page={page} isNext={isNext || false}/>
+      </div>
+      <DataRenderer
+        success={success}
+        error={error || { message: "An unknown error occurred." }}
+        data={tags}
+        empty={EMPTY_TAGS}
+        render={(tags) => (
+          <div className="mt-10 flex w-full flex-wrap gap-4">
+            {tags.map((tag) => (
+              <TagCards key={tag._id} {...tag} />
+            ))}
+          </div>
+        )}
+      />
+      <Pagination page={page} isNext={isNext || false} />
     </>
   );
 };

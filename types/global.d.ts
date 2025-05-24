@@ -78,7 +78,7 @@ interface Collection {
   author: string | Author;
 }
 
-interface User{
+interface User {
   _id: string;
   name: string;
   username: string;
@@ -91,9 +91,8 @@ interface User{
   createdAt: Date;
 }
 
-interface BadgeCounts{
-  GOLD:number;
-  SILVER:number;
-  BRONZE:number;
+interface BadgeCounts {
+  GOLD: number;
+  SILVER: number;
+  BRONZE: number;
 }
-
