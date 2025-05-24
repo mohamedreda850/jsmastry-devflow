@@ -6,6 +6,7 @@ import {
   PaginatedSearchParams,
   User,
 } from "@/types/global";
+
 import action from "../handlers/action";
 import { GetUserSchema, PaginatedSearchPaamsSchema } from "../vaildations";
 import handleError from "../handlers/error";

@@ -3,7 +3,7 @@ import Link from 'next/link';
 
 interface Props{
     imageUrl:string;
-    href:string;
+    href?:string;
     title:string;
 }
 const ProfileLink = ({imageUrl, href, title}:Props) => {

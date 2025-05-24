@@ -10,6 +10,7 @@ import calenderIcon from "./../../../../public/icons/calendar.svg"
 import dayjs from "dayjs";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import Stats from "@/components/user/stats";
 const Profile = async ({params}: RouteParams) => {
   const {id} = await params;
   if(!id) return notFound();
@@ -21,6 +22,7 @@ const Profile = async ({params}: RouteParams) => {
   })
 
   if(!success) return <div className="h1-bold text-dark100_light900">{error?.message}</div>
+  if(!data) return null;
 
   const {user, totalQuestions, totalAnswers} = data;
   const{_id, name, username, image, location, portfolio, reputation, createdAt, bio} = user;
@@ -64,12 +66,20 @@ const Profile = async ({params}: RouteParams) => {
     <div className="flex justify-end max-sm:mb-5 max-sm:w-full sm:mt-4">
       {logedinUser?.user?.id &&(
         <Link href={"/profile/edit"}>
-          <Button className="paragraph-medium btn-secondary min-h-12 min-w-44 text-dark300_light900 px-4 py-3">Edit Profile</Button>
+          <Button className="paragraph-medium btn-secondary text-dark300_light900 min-h-12 min-w-44 px-4 py-3">Edit Profile</Button>
         </Link>
       )}
     </div>
   </section>
-  
+  <Stats
+  totalQuestions={totalQuestions}
+  totalAnswers={totalAnswers}
+  badges={{
+    GOLD:0,
+    SILVER:0,
+    BRONZE:0,
+  }}
+  />
   </>;
 };
 
