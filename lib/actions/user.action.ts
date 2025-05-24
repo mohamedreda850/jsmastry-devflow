@@ -4,16 +4,17 @@ import {
   ActionResponse,
   ErrorResponse,
   PaginatedSearchParams,
+  Question as QuestionType,
   User,
 } from "@/types/global";
 
 import action from "../handlers/action";
-import { GetUserSchema, PaginatedSearchPaamsSchema } from "../vaildations";
+import { GetUserQuestionsSchema, GetUserSchema, PaginatedSearchPaamsSchema } from "../vaildations";
 import handleError from "../handlers/error";
 import { FilterQuery } from "mongoose";
 import { Question, User as UserModel } from "@/database";
 import Answer from "@/database/answer.model";
-import { GetUserParams } from "@/types/action";
+import { GetUserParams, GetUserQuestionsParams } from "@/types/action";
 
 export async function getUsers(params: PaginatedSearchParams): Promise<
   ActionResponse<{
@@ -116,6 +117,50 @@ export const getUser = async (
         user: JSON.parse(JSON.stringify(user)),
         totalQuestions,
         totalAnswers,
+      },
+    };
+  } catch (error) {
+    return handleError(error) as ErrorResponse;
+  }
+};
+export const getUserQuestions = async (
+  params: GetUserQuestionsParams,
+): Promise<
+  ActionResponse<{questions: QuestionType[], isNext: boolean}>
+> => {
+  const validationResult = action({
+    params,
+    schema: GetUserQuestionsSchema,
+  });
+
+  if (validationResult instanceof Error)
+    return handleError(validationResult) as ErrorResponse;
+
+  const { userId, page = 1, pageSize = 10 } = params;
+
+  const skip = (Number(page) - 1) * pageSize;
+
+  const limit = pageSize;
+
+  try {
+    const totalQuestions = await Question.find({
+      author: userId,
+    });
+    const questions = await Question.find({
+      author: userId,
+    })
+    .populate('tags', 'name')
+    .populate('author', 'name image')
+    .skip(skip)
+    .limit(limit);
+
+    const isNext = totalQuestions.length > skip + limit;
+
+    return {
+      success: true,
+      data: {
+        questions: JSON.parse(JSON.stringify(questions)),
+        isNext,
       },
     };
   } catch (error) {
