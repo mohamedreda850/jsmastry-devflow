@@ -1,7 +1,7 @@
 import { auth } from "@/Auth";
 import ProfileLink from "@/components/user/ProfileLink";
 import UserAvatar from "@/components/userAvatar";
-import { getUser, getUserQuestions } from "@/lib/actions/user.action";
+import { getUser, getUserAnswers, getUserQuestions } from "@/lib/actions/user.action";
 import { RouteParams } from "@/types/global";
 import { notFound } from "next/navigation";
 import linkIcon from "./../../../../public/icons/link.svg";
@@ -14,9 +14,10 @@ import Stats from "@/components/user/stats";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { TabsContent } from "@radix-ui/react-tabs";
 import DataRenderer from "@/components/DataRenderer";
-import { EMPTY_QUESTION } from "@/constants/states";
+import { EMBTY_ANSWERS, EMPTY_QUESTION } from "@/constants/states";
 import QuestionCard from "@/components/cards/QuestionCard";
 import Pagination from "@/components/Pagination";
+import AnswerCard from "@/components/cards/AnswerCard";
 const Profile = async ({ params, searchParams }: RouteParams) => {
   const { id } = await params;
   const { page = 1, pageSize = 10 } = await searchParams;
@@ -40,6 +41,14 @@ const {success: userQuestionsSuccess, data: userQuestions, error: userQuestionsE
   pageSize: Number(pageSize) || 10,
 })
 
+const {success: userAnswersSuccess, data: userAnswers, error: userAnswersError} = await getUserAnswers({
+  userId: id,
+  page: Number(page) || 1,
+  pageSize: Number(pageSize) || 10,
+})
+const {questions, isNext: hasMoreQuestions} = userQuestions!;
+const {answers, isNext: hasMoreAnswers} = userAnswers!;
+
   const {
     _id,
     name,
@@ -52,7 +61,6 @@ const {success: userQuestionsSuccess, data: userQuestions, error: userQuestionsE
     bio,
   } = user;
 
-  const {questions, isNext: hasMoreQuestions} = userQuestions!;
   return (
     <>
       <section className="flex flex-col-reverse items-start justify-between sm:flex-row">
@@ -138,7 +146,29 @@ const {success: userQuestionsSuccess, data: userQuestions, error: userQuestionsE
           />
           </TabsContent>
           <TabsContent value="answers" className="flex w-full flex-col gap-6">
-          List of answers
+          <DataRenderer
+            data={answers}
+            empty={EMBTY_ANSWERS}
+            success={userAnswersSuccess}
+            error={userAnswersError || { message: "An unknown error occurred" }}
+            render={(answers) => (
+              <div className="flex w-full flex-col gap-6">
+                {answers.map((answer)=>(
+                  <AnswerCard
+                    key={answer._id}
+                    {...answer}
+                    content={answer.content.slice(0, 30)}
+                    containerClasses="card-wrapper rounded-[10px] px-7 py-9 sm:px-11"
+                    showReadMore={true}
+                  />
+                ))}
+              </div>
+            )}
+          />
+          <Pagination
+            page={Number(page) || 1}
+            isNext={hasMoreAnswers}
+          />
           </TabsContent>
         </Tabs>
         <div className="flex w-full min-w-[250px] flex-1 flex-col max-lg:hidden">
