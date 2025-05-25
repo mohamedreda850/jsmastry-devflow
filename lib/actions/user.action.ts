@@ -6,17 +6,27 @@ import {
   PaginatedSearchParams,
   Question as QuestionType,
   User,
-  Answer as AnswerType
+  Answer as AnswerType,
 } from "@/types/global";
 
 import action from "../handlers/action";
-import { GetUserAnswersSchema, GetUserQuestionsSchema, GetUserSchema, GetUserTagsSchema, PaginatedSearchPaamsSchema } from "../vaildations";
+import {
+  GetUserAnswersSchema,
+  GetUserQuestionsSchema,
+  GetUserSchema,
+  GetUserTagsSchema,
+  PaginatedSearchPaamsSchema,
+} from "../vaildations";
 import handleError from "../handlers/error";
 import { FilterQuery, PipelineStage, Types } from "mongoose";
 import { Question, User as UserModel } from "@/database";
 import Answer from "@/database/answer.model";
-import { GetUserAnswersParams, GetUserParams, GetUserQuestionsParams, GetUserTagsParams } from "@/types/action";
-
+import {
+  GetUserAnswersParams,
+  GetUserParams,
+  GetUserQuestionsParams,
+  GetUserTagsParams,
+} from "@/types/action";
 
 export async function getUsers(params: PaginatedSearchParams): Promise<
   ActionResponse<{
@@ -128,9 +138,7 @@ export const getUser = async (
 
 export const getUserQuestions = async (
   params: GetUserQuestionsParams,
-): Promise<
-  ActionResponse<{questions: QuestionType[], isNext: boolean}>
-> => {
+): Promise<ActionResponse<{ questions: QuestionType[]; isNext: boolean }>> => {
   const validationResult = action({
     params,
     schema: GetUserQuestionsSchema,
@@ -152,10 +160,10 @@ export const getUserQuestions = async (
     const questions = await Question.find({
       author: userId,
     })
-    .populate('tags', 'name')
-    .populate('author', 'name image')
-    .skip(skip)
-    .limit(limit);
+      .populate("tags", "name")
+      .populate("author", "name image")
+      .skip(skip)
+      .limit(limit);
 
     const isNext = totalQuestions.length > skip + limit;
 
@@ -172,9 +180,7 @@ export const getUserQuestions = async (
 };
 export const getUserAnswers = async (
   params: GetUserAnswersParams,
-): Promise<
-  ActionResponse<{answers: AnswerType[], isNext: boolean}>
-> => {
+): Promise<ActionResponse<{ answers: AnswerType[]; isNext: boolean }>> => {
   const validationResult = action({
     params,
     schema: GetUserAnswersSchema,
@@ -196,9 +202,9 @@ export const getUserAnswers = async (
     const answers = await Answer.find({
       author: userId,
     })
-    .populate('author', 'name image')
-    .skip(skip)
-    .limit(limit);
+      .populate("author", "name image")
+      .skip(skip)
+      .limit(limit);
 
     const isNext = totalAnswers.length > skip + limit;
 
@@ -217,7 +223,7 @@ export const getUserAnswers = async (
 export const getUserTopTags = async (
   params: GetUserTagsParams,
 ): Promise<
-  ActionResponse<{tags:{_id:string, name:string, count:number}[],}>
+  ActionResponse<{ tags: { _id: string; name: string; count: number }[] }>
 > => {
   const validationResult = action({
     params,
@@ -229,38 +235,38 @@ export const getUserTopTags = async (
 
   const { userId } = params;
 
- 
-
   try {
-    const pipeline: PipelineStage[]=[
-      {$match:{author:new Types.ObjectId(userId)}},
-      {$unwind:'$tags'},
-      {$group:{_id:'$tags',
-        count:{$sum:1}
-      }},
-      {$lookup: {
-        from:'tags',
-        localField:'_id',
-        foreignField:'_id',
-        as:'tagInfo'
-      }},
-      {$unwind:'$tagInfo'},
-      {$sort:{count:-1}},
-      {$limit:10},
-      {$project:{
-        _id:'$tagInfo._id',
-        name:'$tagInfo.name',
-        count:1
-      }}
+    const pipeline: PipelineStage[] = [
+      { $match: { author: new Types.ObjectId(userId) } },
+      { $unwind: "$tags" },
+      { $group: { _id: "$tags", count: { $sum: 1 } } },
+      {
+        $lookup: {
+          from: "tags",
+          localField: "_id",
+          foreignField: "_id",
+          as: "tagInfo",
+        },
+      },
+      { $unwind: "$tagInfo" },
+      { $sort: { count: -1 } },
+      { $limit: 10 },
+      {
+        $project: {
+          _id: "$tagInfo._id",
+          name: "$tagInfo.name",
+          count: 1,
+        },
+      },
     ];
 
     const tags = await Question.aggregate(pipeline);
-    return{
-      success:true,
-      data:{
-        tags:JSON.parse(JSON.stringify(tags))
-      }
-    }
+    return {
+      success: true,
+      data: {
+        tags: JSON.parse(JSON.stringify(tags)),
+      },
+    };
   } catch (error) {
     return handleError(error) as ErrorResponse;
   }

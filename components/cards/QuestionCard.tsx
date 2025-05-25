@@ -8,16 +8,19 @@ import likeIcon from "./../../public/icons/like.svg";
 import messageIcon from "./../../public/icons/message.svg";
 import eyeIcon from "./../../public/icons/eye.svg";
 import { Question, Tag } from "@/types/global";
+import EditDeleteAction from "../user/EditDeleteAction";
 interface Props {
   question: Question;
+  showActionBtns?: boolean;
 }
 const QuestionCard = ({
   question: { _id, title, author, tags, createdAt, upvotes, answers, view },
+  showActionBtns = false,
 }: Props) => {
   return (
     <div className="card-wrapper rounded-[10px] p-9 sm:px-11 ">
-      <div className="flex flex-col-reverse items-start justify-between gap-5 sm:flex-row">
-        <div>
+      <div className="flex flex-col-reverse items-center justify-between gap-5 sm:flex-row">
+        <div className="flex-1">
           <span className="subtle-regular text-dark400_light700 line-clamp-1 flex sm:hidden">
             {getTimeStamp(createdAt)}
           </span>
@@ -27,6 +30,7 @@ const QuestionCard = ({
             </h3>
           </Link>
         </div>
+        {showActionBtns && <EditDeleteAction type="question" itemId={_id} />}
       </div>
       <div className="flex mt-3.5 w-full flex-wrap gap-2">
         {tags.map((tag: Tag) => (

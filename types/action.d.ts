@@ -74,14 +74,16 @@ interface GetUserParams {
   userId: string;
 }
 
-interface GetUserQuestionsParams extends Omit<PaginatedSearchParams, "query" | "filter" | "sort"> {
+interface GetUserQuestionsParams
+  extends Omit<PaginatedSearchParams, "query" | "filter" | "sort"> {
   userId: string;
 }
 
-interface GetUserAnswersParams extends Omit<PaginatedSearchParams, "query" | "filter" | "sort"> {
+interface GetUserAnswersParams
+  extends Omit<PaginatedSearchParams, "query" | "filter" | "sort"> {
   userId: string;
 }
 
-interface GetUserTagsParams{
-  userId:string;
+interface GetUserTagsParams {
+  userId: string;
 }
