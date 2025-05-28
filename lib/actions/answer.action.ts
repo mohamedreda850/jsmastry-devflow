@@ -1,9 +1,10 @@
+
 "use server";
-import { GetAnswersSchema, AnswerServerSchema } from "./../vaildations";
+import { GetAnswersSchema, AnswerServerSchema, DeleteAnswerSchema } from "./../vaildations";
 import mongoose from "mongoose";
 
 import Answer, { IAnswerDoc } from "@/database/answer.model";
-import { CreateAnswerParams, GetAnswerParams } from "@/types/action";
+import { CreateAnswerParams, DeleteAnswerParams, GetAnswerParams } from "@/types/action";
 import {
   ActionResponse,
   Answer as AnswerType,
@@ -11,9 +12,11 @@ import {
 } from "@/types/global";
 import action from "../handlers/action";
 import handleError from "../handlers/error";
-import { Question } from "@/database";
+import { Question, Vote } from "@/database";
 import { revalidatePath } from "next/cache";
 import ROUTES from "@/constants/routes";
+import { createInteraction } from "./interaction.action";
+import { after } from "next/server";
 
 export async function createAnswer(
   params: CreateAnswerParams,
@@ -47,6 +50,14 @@ export async function createAnswer(
     if (!newAnswer) throw new Error("Failed to create answer");
     question.answers += 1;
     await question.save({ session });
+    after(async ()=>{
+      await createInteraction({action:"post", 
+        actionId:newAnswer._id.toString(),
+        actionTarget:"answer",
+        authorId:userId as string,
+        
+      })
+    })
     await session.commitTransaction();
     revalidatePath(ROUTES.QUESTION(questionId));
     return {
@@ -122,3 +133,42 @@ export const getAnswers = async (
     return handleError(error) as ErrorResponse;
   }
 };
+
+
+export async function deleteAnswer(params:DeleteAnswerParams): Promise<ActionResponse>{
+  const validationReasult = await action({
+    params,
+    schema: DeleteAnswerSchema,
+    authorize: true,
+  });
+
+  if(validationReasult instanceof Error) return handleError(validationReasult) as ErrorResponse;
+
+  const {answerId} = validationReasult.params!;
+  const {user} = validationReasult.session!;
+
+  const session = await mongoose.startSession();
+  
+  try {
+  session.startTransaction();
+
+  const answer = await Answer.findById(answerId).session(session);
+  if(!answer) throw new Error("Answer not found");
+  if(answer?.author?._id?.toString() !== user?.id) throw new Error("You are not authorized to delete this answer");
+
+  await Question.findByIdAndUpdate(answer.question,{$inc:{answers:-1}},{new:true}).session(session);
+
+  await Vote.deleteMany({actionId:answerId,actionType:"answer"}).session(session);
+
+  await Answer.findByIdAndDelete(answerId).session(session);
+
+  revalidatePath(`/proile/${user?.id}`)
+  await session.commitTransaction();
+  session.endSession();
+  return {success:true};
+
+ } catch (error) {
+  return handleError(error) as ErrorResponse;
+ }
+  
+}

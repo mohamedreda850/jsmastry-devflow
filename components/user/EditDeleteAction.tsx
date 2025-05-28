@@ -16,6 +16,8 @@ import trashIcon from "./../../public/icons/trash.svg";
 import Image from "next/image";
 import { toast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
+import { deleteQuestion } from "@/lib/actions/question.action";
+import { deleteAnswer } from "@/lib/actions/answer.action";
 
 interface Props {
   type: string;
@@ -30,13 +32,13 @@ const EditDeleteAction = ({ type, itemId }: Props) => {
   };
   const handleDelete = async () => {
     if(type === "question"){
-        // Call API to delete question
+       await deleteQuestion({questionId: itemId})
         toast({
             title: "Question deleted",
             description: "Your question has been deleted successfully",
         })
     }else if(type === "answer"){
-        // Call API to delete answer
+        await deleteAnswer({answerId: itemId})
         toast({
             title: "Answer deleted",
             description: "Your answer has been deleted successfully",

@@ -19,10 +19,12 @@ import {
   UpdateVoteCountSchema,
 } from "../vaildations";
 import handleError from "../handlers/error";
+import { after } from "next/server";
+import { createInteraction } from "./interaction.action";
 
 export async function updateVoteCount(
   params: UpdateVoteCountParams,
-  session?: ClientSession,
+  session?: ClientSession
 ): Promise<ActionResponse> {
   const validationResult = await action({
     params,
@@ -42,12 +44,12 @@ export async function updateVoteCount(
     const result = await Model.findByIdAndUpdate(
       targetId,
       { $inc: { [voteField]: change } },
-      { new: true, session },
+      { new: true, session }
     );
 
     if (!result)
       return handleError(
-        new Error("Failed to update vote count"),
+        new Error("Failed to update vote count")
       ) as ErrorResponse;
 
     return { success: true };
@@ -57,7 +59,7 @@ export async function updateVoteCount(
 }
 
 export async function createVote(
-  params: CreateVoteParams,
+  params: CreateVoteParams
 ): Promise<ActionResponse> {
   const validationResult = await action({
     params,
@@ -78,6 +80,12 @@ export async function createVote(
   session.startTransaction();
 
   try {
+    const Model = targetType === "question" ? Question : Answer;
+    const contentDoc = await Model.findById(targetId).session(session);
+    if (!contentDoc)
+      return handleError(new Error("Content not found")) as ErrorResponse;
+    const contentAuthorId = contentDoc.author.toString();
+
     const existingVote = await Vote.findOne({
       author: userId,
       actionId: targetId,
@@ -86,25 +94,24 @@ export async function createVote(
 
     if (existingVote) {
       if (existingVote.voteType === voteType) {
-        // If the user has already voted with the same voteType, remove the vote
         await Vote.deleteOne({ _id: existingVote._id }).session(session);
         await updateVoteCount(
           { targetId, targetType, voteType, change: -1 },
-          session,
+          session
         );
       } else {
         await Vote.findByIdAndUpdate(
           existingVote._id,
           { voteType },
-          { new: true, session },
+          { new: true, session }
         );
         await updateVoteCount(
           { targetId, targetType, voteType: existingVote.voteType, change: -1 },
-          session,
+          session
         );
         await updateVoteCount(
           { targetId, targetType, voteType, change: 1 },
-          session,
+          session
         );
       }
     } else {
@@ -119,14 +126,21 @@ export async function createVote(
         ],
         {
           session,
-        },
+        }
       );
       await updateVoteCount(
         { targetId, targetType, voteType, change: 1 },
-        session,
+        session
       );
     }
-
+    after(async ()=>{
+      await createInteraction({action: voteType, 
+        actionId:targetId,
+        actionTarget:targetType,
+        authorId:contentAuthorId,
+        
+      })
+    })
     await session.commitTransaction();
     session.endSession();
 
@@ -141,7 +155,7 @@ export async function createVote(
 }
 
 export async function hasVoted(
-  params: HasVotedParams,
+  params: HasVotedParams
 ): Promise<ActionResponse<HasVotedResponse>> {
   const validationResult = await action({
     params,

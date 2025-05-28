@@ -5,6 +5,7 @@ import {
   getUser,
   getUserAnswers,
   getUserQuestions,
+  getUserStats,
   getUserTopTags,
 } from "@/lib/actions/user.action";
 import { RouteParams } from "@/types/global";
@@ -40,7 +41,7 @@ const Profile = async ({ params, searchParams }: RouteParams) => {
     );
   if (!data) return null;
 
-  const { user, totalQuestions, totalAnswers } = data;
+  const { user} = data;
   const {
     success: userQuestionsSuccess,
     data: userQuestions,
@@ -71,6 +72,7 @@ const Profile = async ({ params, searchParams }: RouteParams) => {
   const { answers, isNext: hasMoreAnswers } = userAnswers!;
   const { tags } = userTopTags!;
 
+  const { data: userStats } = await getUserStats({ userId: id });
   const {
     _id,
     name,
@@ -130,9 +132,10 @@ const Profile = async ({ params, searchParams }: RouteParams) => {
         </div>
       </section>
       <Stats
-        totalQuestions={totalQuestions}
-        totalAnswers={totalAnswers}
-        badges={{
+        totalQuestions={userStats?.totalQuestions || 0}
+        totalAnswers={userStats?.totalAnswers || 0}
+        reputationPoints={reputation || 0}
+        badges={userStats?.badges || {
           GOLD: 0,
           SILVER: 0,
           BRONZE: 0,
