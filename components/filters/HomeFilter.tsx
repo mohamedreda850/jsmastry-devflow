@@ -11,7 +11,6 @@ const HomeFilter = () => {
   const searchParams = useSearchParams();
   const filterParams = searchParams.get("filter");
   const filters = [
-    
     { name: "Newest", value: "newest" },
     { name: "Popular", value: "popular" },
     { name: "Unanswered", value: "unanswered" },

@@ -55,7 +55,9 @@ const AnswerCard = ({
 }: Props) => {
   const hasVotedPromise = hasVoted({ targetId: _id, targetType: "answer" });
   return (
-    <article className={cn("light-border relative border-b py-10", containerClasses)}>
+    <article
+      className={cn("light-border relative border-b py-10", containerClasses)}
+    >
       <span id={`answer-${_id}`} className="hash-span" />
       {showActionBtns && (
         <div className="background-light800 flex-center  absolute -right-2 -top-5 size-9 eounded-[100%]">

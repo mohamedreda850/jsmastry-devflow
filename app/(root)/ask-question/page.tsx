@@ -1,8 +1,12 @@
 import { auth } from "@/Auth";
 import QuestionForm from "@/components/forms/QuestionForm";
+import { Metadata } from "next";
 import { redirect } from "next/navigation";
 import React from "react";
-
+export const metadata: Metadata = {
+  title: "Ask a question",
+  description: "Ask a question to the community",
+};
 const AskAQuestion = async () => {
   const session = await auth();
   if (!session) return redirect("/sign-in");

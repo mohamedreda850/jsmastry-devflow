@@ -35,6 +35,7 @@ import { revalidatePath } from "next/cache";
 import { createInteraction } from "./interaction.action";
 import { after } from "next/server";
 import { auth } from "@/Auth";
+import { cache } from "react";
 
 export async function createQuestion(
   params: CreatQuestionParams
@@ -207,8 +208,7 @@ export async function editQuestion(
     await session.endSession();
   }
 }
-
-export async function getQuestion(
+export const getQuestion = cache(async function getQuestion(
   params: GetQuestionParams
 ): Promise<ActionResponse<Question1>> {
   const validatedResult = await action({
@@ -233,7 +233,7 @@ export async function getQuestion(
   } catch (error) {
     return handleError(error) as ErrorResponse;
   }
-}
+});
 
 export async function getRecommendedQuestions({
   userId,
@@ -286,6 +286,7 @@ export async function getRecommendedQuestions({
     isNext: total > (skip || 0) + questions.length,
   };
 }
+
 export async function getQuestions(
   params: PaginatedSearchParams
 ): Promise<ActionResponse<{ questions: Question1[]; isNext: boolean }>> {

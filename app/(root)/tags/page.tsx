@@ -10,6 +10,13 @@ import TagCards from "@/components/cards/TagCard";
 import CommonFilter from "@/components/filters/CommonFilter";
 import { TagFilters } from "@/constants/filters";
 import Pagination from "@/components/Pagination";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Tags",
+  description: "Tags of questions",
+};
+
 const Tags = async ({ searchParams }: RouteParams) => {
   const { page, pageSize, query, filter } = await searchParams;
   const { success, data, error } = await getTags({

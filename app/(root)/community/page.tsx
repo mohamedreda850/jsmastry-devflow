@@ -10,6 +10,12 @@ import UserCard from "@/components/cards/UserCard";
 import CommonFilter from "@/components/filters/CommonFilter";
 import { UserFilters } from "@/constants/filters";
 import Pagination from "@/components/Pagination";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Community",
+  description: "Community of users",
+};
 const Community = async ({ searchParams }: RouteParams) => {
   const { page, pageSize, query, filter } = await searchParams;
   const { success, data, error } = await getUsers({

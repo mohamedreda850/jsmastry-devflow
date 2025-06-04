@@ -24,29 +24,31 @@ interface Props {
   itemId: string;
 }
 const EditDeleteAction = ({ type, itemId }: Props) => {
-    const router = useRouter();
+  const router = useRouter();
   const handleEdit = async () => {
-    if(type === "question"){
-        router.push(`/questions/${itemId}/edit`);
+    if (type === "question") {
+      router.push(`/questions/${itemId}/edit`);
     }
   };
   const handleDelete = async () => {
-    if(type === "question"){
-       await deleteQuestion({questionId: itemId})
-        toast({
-            title: "Question deleted",
-            description: "Your question has been deleted successfully",
-        })
-    }else if(type === "answer"){
-        await deleteAnswer({answerId: itemId})
-        toast({
-            title: "Answer deleted",
-            description: "Your answer has been deleted successfully",
-        })
+    if (type === "question") {
+      await deleteQuestion({ questionId: itemId });
+      toast({
+        title: "Question deleted",
+        description: "Your question has been deleted successfully",
+      });
+    } else if (type === "answer") {
+      await deleteAnswer({ answerId: itemId });
+      toast({
+        title: "Answer deleted",
+        description: "Your answer has been deleted successfully",
+      });
     }
   };
   return (
-    <div className={`flex items-center justify-end gap-3 max-sm:w-full ${type === "answer" && "gap-0 justify-center"}`}>
+    <div
+      className={`flex items-center justify-end gap-3 max-sm:w-full ${type === "answer" && "gap-0 justify-center"}`}
+    >
       {type === "question" && (
         <Image
           src={editIcon}
@@ -78,7 +80,12 @@ const EditDeleteAction = ({ type, itemId }: Props) => {
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel className="btn">Cancel</AlertDialogCancel>
-            <AlertDialogAction className="!border-primary-100 !bg-primary-500 !text-light-800" onClick={handleDelete}>Continue</AlertDialogAction>
+            <AlertDialogAction
+              className="!border-primary-100 !bg-primary-500 !text-light-800"
+              onClick={handleDelete}
+            >
+              Continue
+            </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>

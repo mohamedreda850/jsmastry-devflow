@@ -69,3 +69,12 @@ export const EMPTY_SAVED_QUESTIONS = {
     href: ROUTES.HOME,
   },
 };
+
+export const EMPTY_JOBS = {
+  title: "No Jobs Found",
+  message: "You haven't posted any jobs yet. Start posting some!",
+  button: {
+    text: "Post a Job",
+    href: ROUTES.JOBS,
+  },
+};

@@ -36,8 +36,6 @@ export const sidebarLinks = [
   },
 ];
 
-
-
 export const BADGE_CRITERIA = {
   QUESTION_COUNT: {
     BRONZE: 1,

@@ -100,7 +100,7 @@ export async function getUsers(params: PaginatedSearchParams): Promise<
 }
 
 export const getUser = async (
-  params: GetUserParams
+  params: GetUserParams,
 ): Promise<
   ActionResponse<{ user: User; totalQuestions: number; totalAnswers: number }>
 > => {
@@ -139,7 +139,7 @@ export const getUser = async (
 };
 
 export const getUserQuestions = async (
-  params: GetUserQuestionsParams
+  params: GetUserQuestionsParams,
 ): Promise<ActionResponse<{ questions: QuestionType[]; isNext: boolean }>> => {
   const validationResult = action({
     params,
@@ -181,7 +181,7 @@ export const getUserQuestions = async (
   }
 };
 export const getUserAnswers = async (
-  params: GetUserAnswersParams
+  params: GetUserAnswersParams,
 ): Promise<ActionResponse<{ answers: AnswerType[]; isNext: boolean }>> => {
   const validationResult = action({
     params,
@@ -223,7 +223,7 @@ export const getUserAnswers = async (
 };
 
 export const getUserTopTags = async (
-  params: GetUserTagsParams
+  params: GetUserTagsParams,
 ): Promise<
   ActionResponse<{ tags: { _id: string; name: string; count: number }[] }>
 > => {
@@ -275,7 +275,7 @@ export const getUserTopTags = async (
 };
 
 export const getUserStats = async (
-  params: GetUserParams
+  params: GetUserParams,
 ): Promise<
   ActionResponse<{
     totalQuestions: number;

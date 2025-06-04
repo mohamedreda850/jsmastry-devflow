@@ -25,6 +25,13 @@ import QuestionCard from "@/components/cards/QuestionCard";
 import Pagination from "@/components/Pagination";
 import AnswerCard from "@/components/cards/AnswerCard";
 import TagCards from "@/components/cards/TagCard";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Profile",
+  description: "Profile of a user",
+};
+
 const Profile = async ({ params, searchParams }: RouteParams) => {
   const { id } = await params;
   const { page = 1, pageSize = 10 } = await searchParams;
@@ -41,7 +48,7 @@ const Profile = async ({ params, searchParams }: RouteParams) => {
     );
   if (!data) return null;
 
-  const { user} = data;
+  const { user } = data;
   const {
     success: userQuestionsSuccess,
     data: userQuestions,
@@ -135,11 +142,13 @@ const Profile = async ({ params, searchParams }: RouteParams) => {
         totalQuestions={userStats?.totalQuestions || 0}
         totalAnswers={userStats?.totalAnswers || 0}
         reputationPoints={reputation || 0}
-        badges={userStats?.badges || {
-          GOLD: 0,
-          SILVER: 0,
-          BRONZE: 0,
-        }}
+        badges={
+          userStats?.badges || {
+            GOLD: 0,
+            SILVER: 0,
+            BRONZE: 0,
+          }
+        }
       />
       <section className="mt-10 flex gap-10">
         <Tabs defaultValue="top-posts" className="flex-[2]">

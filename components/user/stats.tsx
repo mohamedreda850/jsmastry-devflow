@@ -24,7 +24,12 @@ const StatsCard = ({ imgURL, value, title }: StatsCardProps) => (
     </div>
   </div>
 );
-const Stats = ({ totalQuestions, totalAnswers, badges, reputationPoints }: Props) => {
+const Stats = ({
+  totalQuestions,
+  totalAnswers,
+  badges,
+  reputationPoints,
+}: Props) => {
   return (
     <div className="mt-3">
       <h3 className="h3-semibold text-dark100_light900">Stats</h3>

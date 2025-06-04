@@ -1,6 +1,7 @@
-import { IInteractionDoc } from '@/database/interaction.model';
+import { IInteractionDoc } from "@/database/interaction.model";
 import { PaginatedSearchParams } from "./global";
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
+import { JobType } from "./job";
 
 interface signinWithOAuthParams {
   provider: "github" | "google";
@@ -99,23 +100,61 @@ interface DeleteAnswerParams {
 }
 
 interface CreateInteractionParams {
-  action: "view" | "upvote" | "downvote" | "bookmark" | "post" | "edit" | "delete" | "search";
+  action:
+    | "view"
+    | "upvote"
+    | "downvote"
+    | "bookmark"
+    | "post"
+    | "edit"
+    | "delete"
+    | "search";
   actionTarget: "question" | "answer";
   actionId: string;
   authorId: string;
 }
 
 interface UpdateInteractionParams {
-  interaction: IInteractionDoc,
-  session: mongoose.ClientSession,
-  performerId: string,
-  authorId: string,
+  interaction: IInteractionDoc;
+  session: mongoose.ClientSession;
+  performerId: string;
+  authorId: string;
 }
 
-interface RecommendationParams{
-  userId:string,
-  query?: string,
-  skip?: number,
-  limit?: number,
+interface RecommendationParams {
+  userId: string;
+  query?: string;
+  skip?: number;
+  limit?: number;
 }
 
+interface CreateJobParams {
+  title: string;
+  company: string;
+  location: string;
+  type: JobType;
+  salary?: string;
+  logoUrl?: string;
+  applyUrl: string;
+  description: string;
+}
+export type JobType =
+  | "full-time"
+  | "part-time"
+  | "Remote"
+  | "On-Site"
+  | "Hybrid"
+  | "Contract"
+  | "Internship"
+  | "Freelance"
+  | "Temporary"
+  | "Volunteer";
+
+export interface JobFilter {
+  name: string;
+  value: JobType;
+}
+
+export interface GetJobParams {
+  jobId: string;
+}

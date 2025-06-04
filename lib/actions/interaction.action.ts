@@ -13,7 +13,7 @@ import handleError from "../handlers/error";
 import { User } from "@/database";
 
 export async function createInteraction(
-  params: CreateInteractionParams
+  params: CreateInteractionParams,
 ): Promise<ActionResponse<IInteractionDoc>> {
   const validationResult = await action({
     params,
@@ -45,7 +45,7 @@ export async function createInteraction(
           actionType: actionTarget,
         },
       ],
-      { session }
+      { session },
     );
     await updateInteraction({
       interaction: interaction[0],
@@ -92,7 +92,7 @@ async function updateInteraction(params: UpdateInteractionParams) {
     await User.findByIdAndUpdate(
       performerId,
       { $inc: { reputation: authorPoints } },
-      { session }
+      { session },
     );
     return;
   }
@@ -111,6 +111,6 @@ async function updateInteraction(params: UpdateInteractionParams) {
         },
       },
     ],
-    { session }
+    { session },
   );
 }

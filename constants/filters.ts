@@ -31,3 +31,16 @@ export const UserFilters = [
   { name: "Oldest", value: "oldest" },
   { name: "Popular", value: "popular" },
 ];
+
+export const JobFilters = [
+  { name: "Full Time", value: "full-time" },
+  { name: "Part Time", value: "part-time" },
+  { name: "Remote", value: "Remote" },
+  { name: "On-Site", value: "On-Site" },
+  { name: "Hybrid", value: "Hybrid" },
+  { name: "Contract", value: "Contract" },
+  { name: "Internship", value: "Internship" },
+  { name: "Freelance", value: "Freelance" },
+  { name: "Temporary", value: "Temporary" },
+  { name: "Volunteer", value: "Volunteer" },
+];

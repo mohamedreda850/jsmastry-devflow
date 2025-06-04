@@ -62,7 +62,7 @@ export const AskQuestionSchema = z.object({
       z
         .string()
         .min(1, { message: "Tag must be at least 1 character long" })
-        .max(30, { message: "Tag cannot exceed 30 characters." }),
+        .max(30, { message: "Tag cannot exceed 30 characters." })
     )
     .min(1, { message: "At least one tag is required" })
     .max(3, { message: "Maximum 3 tags are allowed" }),
@@ -225,7 +225,37 @@ export const DeleteAnswerSchema = z.object({
 
 export const CreateInteractionSchema = z.object({
   action: z.enum(InteractionActionEnums),
-  actionTarget: z.enum(["question","answer"]),
+  actionTarget: z.enum(["question", "answer"]),
   actionId: z.string().min(1, "Action ID is required."),
   authorId: z.string().min(1, "Author ID is required."),
+});
+
+export const JobTypeEnum = z.enum([
+  "full-time",
+  "part-time",
+  "Remote",
+  "On-Site",
+  "Hybrid",
+  "Contract",
+  "Internship",
+  "Freelance",
+  "Temporary",
+  "Volunteer",
+]);
+
+export const JobSchema = z.object({
+  title: z.string().min(2, "Title is required"),
+  company: z.string().min(2, "Company is required"),
+  location: z.string().min(2, "Location is required"),
+  type: JobTypeEnum,
+  salary: z.string().optional(),
+  logoUrl: z.string().optional(),
+  applyUrl: z.string().min(1, "Apply URL is required"),
+  description: z.string().min(10, "Description is required"),
+});
+
+export type JobFormValues = z.infer<typeof JobSchema>;
+
+export const GetJobSchema = z.object({
+  jobId: z.string().min(1, "Job ID is required"),
 });

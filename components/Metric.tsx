@@ -37,9 +37,11 @@ const Metric = ({
           className={`rounded-[100%] object-contain ${imgStyles}`}
         />
       ) : (
-        <div className={`flex-center background-light800_dark400 size-4 rounded-[100%] ${imgStyles}`}>
+        <div
+          className={`flex-center background-light800_dark400 size-4 rounded-[100%] ${imgStyles}`}
+        >
           <span className="text-dark400_light700 text-[8px] font-medium leading-none">
-            {typeof value === 'string' ? value.charAt(0).toUpperCase() : '?'}
+            {typeof value === "string" ? value.charAt(0).toUpperCase() : "?"}
           </span>
         </div>
       )}

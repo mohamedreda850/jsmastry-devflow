@@ -20,12 +20,33 @@ import { hasVoted } from "@/lib/actions/vote.action";
 import { Suspense } from "react";
 import SaveQuestion from "@/components/questions/SaveQuestion";
 import { hasSavedAction } from "@/lib/actions/collection.action";
+import { Metadata } from "next";
 
 Code.theme = {
   light: "github-light",
   dark: "github-dark",
   lightSelector: "html.light",
 };
+export async function generateMetadata({
+  params,
+}: RouteParams): Promise<Metadata> {
+  const { id } = await params;
+  const { success, data: question } = await getQuestion({ questionId: id });
+  if (!success || !question)
+    return {
+      title: "Question not found",
+      description: "The question you are looking for does not exist.",
+    };
+  return {
+    title: question.title,
+    description: question.content.slice(0, 100),
+    twitter: {
+      card: "summary_large_image",
+      title: question.title,
+      description: question.content.slice(0, 100),
+    },
+  };
+}
 const QuestionDetails = async ({ params, searchParams }: RouteParams) => {
   const { id } = await params;
   // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars

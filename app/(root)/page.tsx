@@ -11,6 +11,12 @@ import { EMPTY_QUESTION } from "@/constants/states";
 import CommonFilter from "@/components/filters/CommonFilter";
 import { HomePageFilters } from "@/constants/filters";
 import Pagination from "@/components/Pagination";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Home",
+  description: "Home of questions",
+};
 
 interface SearchParams {
   searchParams: Promise<{ [key: string]: string }>;

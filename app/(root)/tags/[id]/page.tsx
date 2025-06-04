@@ -7,6 +7,23 @@ import { getTagQuestions } from "@/lib/actions/tag.action";
 import { RouteParams } from "@/types/global";
 import searchImage from "./../../../../public/icons/search.svg";
 import Pagination from "@/components/Pagination";
+import { Metadata } from "next";
+
+export async function generateMetadata({
+  params,
+}: RouteParams): Promise<Metadata> {
+  const { id } = await params;
+  const { success, data: tag } = await getTagQuestions({ tagId: id });
+  if (!success || !tag)
+    return {
+      title: "Tag not found",
+      description: "The tag you are looking for does not exist.",
+    };
+  return {
+    title: tag.tag.name,
+    description: `Questions tagged ${tag.tag.name}`,
+  };
+}
 
 const page = async ({ params, searchParams }: RouteParams) => {
   const { id } = await params;
