@@ -1,5 +1,5 @@
 import { User } from "@/types/global";
-import UserAvatar from "../userAvatar";
+import UserAvatar from "../UserAvatar";
 import Link from "next/link";
 import ROUTES from "@/constants/routes";
 

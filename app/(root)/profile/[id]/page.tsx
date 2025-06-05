@@ -1,6 +1,6 @@
 import { auth } from "@/Auth";
 import ProfileLink from "@/components/user/ProfileLink";
-import UserAvatar from "@/components/userAvatar";
+import UserAvatar from "@/components/UserAvatar";
 import {
   getUser,
   getUserAnswers,

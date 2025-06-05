@@ -1,5 +1,5 @@
 import Metric from "@/components/Metric";
-import UserAvatar from "@/components/userAvatar";
+import UserAvatar from "@/components/UserAvatar";
 import ROUTES from "@/constants/routes";
 import { RouteParams, Tag } from "@/types/global";
 import Link from "next/link";

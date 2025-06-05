@@ -4,7 +4,7 @@ import React from "react";
 import logo from "./../../../public/images/site-logo.svg";
 import Theme from "./Theme";
 import MobileNavigation from "./MobileNavigation";
-import UserAvatar from "@/components/userAvatar";
+import UserAvatar from "@/components/UserAvatar";
 import { auth } from "@/Auth";
 import GlobalSearch from "@/components/search/GlobalSearch";
 

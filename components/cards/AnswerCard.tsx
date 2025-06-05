@@ -1,6 +1,6 @@
 import { Answer } from "@/types/global";
 import React, { Suspense } from "react";
-import UserAvatar from "../userAvatar";
+import UserAvatar from "../UserAvatar";
 import Link from "next/link";
 import ROUTES from "@/constants/routes";
 import { cn, getTimeStamp } from "@/lib/utils";
