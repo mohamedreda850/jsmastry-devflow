@@ -17,6 +17,7 @@ import {
   GetUserSchema,
   GetUserTagsSchema,
   PaginatedSearchPaamsSchema,
+  UpdateUserSchema,
 } from "../vaildations";
 import handleError from "../handlers/error";
 import { FilterQuery, PipelineStage, Types } from "mongoose";
@@ -27,6 +28,7 @@ import {
   GetUserParams,
   GetUserQuestionsParams,
   GetUserTagsParams,
+  UpdateUserParams,
 } from "@/types/action";
 import { assignBadges } from "../utils";
 
@@ -100,7 +102,7 @@ export async function getUsers(params: PaginatedSearchParams): Promise<
 }
 
 export const getUser = async (
-  params: GetUserParams,
+  params: GetUserParams
 ): Promise<
   ActionResponse<{ user: User; totalQuestions: number; totalAnswers: number }>
 > => {
@@ -139,7 +141,7 @@ export const getUser = async (
 };
 
 export const getUserQuestions = async (
-  params: GetUserQuestionsParams,
+  params: GetUserQuestionsParams
 ): Promise<ActionResponse<{ questions: QuestionType[]; isNext: boolean }>> => {
   const validationResult = action({
     params,
@@ -181,7 +183,7 @@ export const getUserQuestions = async (
   }
 };
 export const getUserAnswers = async (
-  params: GetUserAnswersParams,
+  params: GetUserAnswersParams
 ): Promise<ActionResponse<{ answers: AnswerType[]; isNext: boolean }>> => {
   const validationResult = action({
     params,
@@ -223,7 +225,7 @@ export const getUserAnswers = async (
 };
 
 export const getUserTopTags = async (
-  params: GetUserTagsParams,
+  params: GetUserTagsParams
 ): Promise<
   ActionResponse<{ tags: { _id: string; name: string; count: number }[] }>
 > => {
@@ -275,7 +277,7 @@ export const getUserTopTags = async (
 };
 
 export const getUserStats = async (
-  params: GetUserParams,
+  params: GetUserParams
 ): Promise<
   ActionResponse<{
     totalQuestions: number;
@@ -339,6 +341,39 @@ export const getUserStats = async (
         totalAnswers: answerState?.count,
         badges,
       },
+    };
+  } catch (error) {
+    return handleError(error) as ErrorResponse;
+  }
+};
+
+export const updateUser = async (
+  params: UpdateUserParams
+): Promise<ActionResponse<{ user: User }>> => {
+  const validationResult = await action({
+    params,
+    schema: UpdateUserSchema,
+    authorize: true,
+  });
+
+  if (validationResult instanceof Error) {
+    return handleError(validationResult) as ErrorResponse;
+  }
+
+  const { userId } = validationResult.params!;
+
+  try {
+    const updatedUser = await UserModel.findByIdAndUpdate(userId, params, {
+      new: true,
+    });
+
+    if (!updatedUser) {
+      throw new Error("User not found");
+    }
+
+    return {
+      success: true,
+      data: { user: JSON.parse(JSON.stringify(updatedUser)) },
     };
   } catch (error) {
     return handleError(error) as ErrorResponse;

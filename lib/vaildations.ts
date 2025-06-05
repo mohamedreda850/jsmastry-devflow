@@ -259,3 +259,35 @@ export type JobFormValues = z.infer<typeof JobSchema>;
 export const GetJobSchema = z.object({
   jobId: z.string().min(1, "Job ID is required"),
 });
+
+export const UpdateUserSchema = z.object({
+  userId: z.string().min(1, { message: "User ID is required" }),
+  name: z
+    .string()
+    .min(1, { message: "Name is required." })
+    .max(50, { message: "Name cannot exceed 50 characters." })
+    .regex(/^[a-zA-Z\s]+$/, {
+      message: "Name can only contain letters and spaces.",
+    }),
+  username: z
+    .string()
+    .min(3, { message: "Username must be at least 3 characters long." })
+    .max(30, { message: "Username cannot exceed 30 characters." }),
+   
+  email: z.string().email({ message: "Please provide a valid email address." }),
+  bio: z
+    .string()
+    .max(500, { message: "Bio cannot exceed 500 characters." })
+    .optional(),
+  image: z
+    .string()
+    .url({ message: "Please provide a valid image URL." })
+    .optional(),
+  location: z
+    .string()
+    .max(100, { message: "Location cannot exceed 100 characters." })
+    .optional(),
+  portfolio: z
+    .string()
+    .optional(),
+});

@@ -158,3 +158,17 @@ export interface JobFilter {
 export interface GetJobParams {
   jobId: string;
 }
+// ... existing code ...
+
+export type UpdateUserParams = {
+  userId: string;
+  name?: string;
+  username?: string;
+  email?: string;
+  bio?: string;
+  image?: string;
+  location?: string;
+  portfolio?: string;
+};
+
+// ... existing code ...
