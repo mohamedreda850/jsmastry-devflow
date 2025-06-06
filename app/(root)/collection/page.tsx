@@ -9,6 +9,8 @@ import CommonFilter from "@/components/filters/CommonFilter";
 import { CollectionFilters } from "@/constants/filters";
 import Pagination from "@/components/Pagination";
 import { Metadata } from "next";
+import { auth } from "@/Auth";
+import { redirect } from "next/navigation";
 
 interface SearchParams {
   searchParams: Promise<{ [key: string]: string }>;
@@ -20,6 +22,9 @@ export const metadata: Metadata = {
 };
 
 const Collections = async ({ searchParams }: SearchParams) => {
+  const session = await auth();
+  if (!session) return redirect("/sign-in");
+
   const { page, pageSize, query, filter } = await searchParams;
   const { success, data, error } = await getSavedQuestions({
     page: Number(page) || 1,
