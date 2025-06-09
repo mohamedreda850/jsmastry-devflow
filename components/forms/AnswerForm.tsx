@@ -79,6 +79,25 @@ const AnswerForm = ({ questionId, questionTitle, questionContent }: Props) => {
         description: "You must be logged in to generate an AI answer",
       });
     }
+
+    // Validate question title length
+    if (questionTitle.length < 5 || questionTitle.length > 150) {
+      return toast({
+        title: "Error",
+        description: "Question title must be between 5 and 150 characters",
+        variant: "destructive",
+      });
+    }
+
+    // Validate question content length
+    if (questionContent.length < 100) {
+      return toast({
+        title: "Error",
+        description: "Question content must be at least 100 characters",
+        variant: "destructive",
+      });
+    }
+
     setIsAISubmiting(true);
     const userAnswer = editorRef?.current?.getMarkdown();
 
