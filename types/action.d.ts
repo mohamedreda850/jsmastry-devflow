@@ -1,6 +1,7 @@
 import { IInteractionDoc } from "@/database/interaction.model";
 import { PaginatedSearchParams } from "./global";
 import mongoose from "mongoose";
+import { JobType } from "./job";
 
 interface signinWithOAuthParams {
   provider: "github" | "google";
@@ -127,6 +128,38 @@ interface RecommendationParams {
   limit?: number;
 }
 
+interface CreateJobParams {
+  title: string;
+  company: string;
+  location: string;
+  type: JobType;
+  salary?: string;
+  logoUrl?: string;
+  applyUrl: string;
+  description: string;
+}
+export type JobType =
+  | "full-time"
+  | "part-time"
+  | "Remote"
+  | "On-Site"
+  | "Hybrid"
+  | "Contract"
+  | "Internship"
+  | "Freelance"
+  | "Temporary"
+  | "Volunteer";
+
+export interface JobFilter {
+  name: string;
+  value: JobType;
+}
+
+export interface GetJobParams {
+  jobId: string;
+}
+// ... existing code ...
+
 export type UpdateUserParams = {
   userId: string;
   name?: string;
@@ -137,3 +170,5 @@ export type UpdateUserParams = {
   location?: string;
   portfolio?: string;
 };
+
+// ... existing code ...
