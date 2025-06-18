@@ -22,7 +22,7 @@ export const DEFAULT_ERROR = {
 export const EMPTY_QUESTION = {
   title: "Ahh, No Questions Yet!",
   message:
-    "The question board is empty. Maybe it’s waiting for your brilliant question to get things rolling",
+    "The question board is empty. Maybe it's waiting for your brilliant question to get things rolling",
   button: {
     text: "Ask a Question",
     href: ROUTES.ASK_QUESTION,
@@ -40,7 +40,7 @@ export const EMPTY_TAGS = {
 export const EMBTY_ANSWERS = {
   title: "No Answers Found",
   message:
-    "The answer board is empty. Maybe it’s waiting for your brilliant answer to get things rolling",
+    "The answer board is empty. Maybe it's waiting for your brilliant answer to get things rolling",
   button: {
     text: "Answer",
     href: ROUTES.HOME,
@@ -50,7 +50,7 @@ export const EMBTY_ANSWERS = {
 export const EMPTY_COLLECTIONS = {
   title: "Collections Are Empty",
   message:
-    "Looks like you haven’t created any collections yet. Start curating something extraordinary today",
+    "Looks like you haven't created any collections yet. Start curating something extraordinary today",
   button: {
     text: "Save to Collection",
     href: ROUTES.COLLECTION,
@@ -67,14 +67,5 @@ export const EMPTY_SAVED_QUESTIONS = {
   button: {
     text: "Explore Questions",
     href: ROUTES.HOME,
-  },
-};
-
-export const EMPTY_JOBS = {
-  title: "No Jobs Found",
-  message: "You haven't posted any jobs yet. Start posting some!",
-  button: {
-    text: "Post a Job",
-    href: ROUTES.JOBS,
   },
 };

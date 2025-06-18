@@ -238,36 +238,6 @@ export const CreateInteractionSchema = z.object({
   authorId: z.string().min(1, "Author ID is required."),
 });
 
-export const JobTypeEnum = z.enum([
-  "full-time",
-  "part-time",
-  "Remote",
-  "On-Site",
-  "Hybrid",
-  "Contract",
-  "Internship",
-  "Freelance",
-  "Temporary",
-  "Volunteer",
-]);
-
-export const JobSchema = z.object({
-  title: z.string().min(2, "Title is required"),
-  company: z.string().min(2, "Company is required"),
-  location: z.string().min(2, "Location is required"),
-  type: JobTypeEnum,
-  salary: z.string().optional(),
-  logoUrl: z.string().optional(),
-  applyUrl: z.string().min(1, "Apply URL is required"),
-  description: z.string().min(10, "Description is required"),
-});
-
-export type JobFormValues = z.infer<typeof JobSchema>;
-
-export const GetJobSchema = z.object({
-  jobId: z.string().min(1, "Job ID is required"),
-});
-
 export const UpdateUserSchema = z.object({
   userId: z.string().min(1, { message: "User ID is required" }),
   name: z
@@ -281,7 +251,7 @@ export const UpdateUserSchema = z.object({
     .string()
     .min(3, { message: "Username must be at least 3 characters long." })
     .max(30, { message: "Username cannot exceed 30 characters." }),
-   
+
   email: z.string().email({ message: "Please provide a valid email address." }),
   bio: z
     .string()
@@ -295,7 +265,5 @@ export const UpdateUserSchema = z.object({
     .string()
     .max(100, { message: "Location cannot exceed 100 characters." })
     .optional(),
-  portfolio: z
-    .string()
-    .optional(),
+  portfolio: z.string().optional(),
 });

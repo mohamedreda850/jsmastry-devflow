@@ -8,7 +8,7 @@ import {
   getUserStats,
   getUserTopTags,
 } from "@/lib/actions/user.action";
-import { RouteParams } from "@/types/global";
+import { RouteParams, Question, Answer } from "@/types/global";
 import { notFound } from "next/navigation";
 import linkIcon from "./../../../../public/icons/link.svg";
 import locationIcon from "./../../../../public/icons/location.svg";
@@ -78,6 +78,11 @@ const Profile = async ({ params, searchParams }: RouteParams) => {
   const { questions, isNext: hasMoreQuestions } = userQuestions!;
   const { answers, isNext: hasMoreAnswers } = userAnswers!;
   const { tags } = userTopTags!;
+
+  // Type assertions to fix TypeScript errors
+  const typedQuestions = questions as Question[];
+  const typedAnswers = answers as Answer[];
+  const typedTags = tags as { _id: string; name: string; count: number }[];
 
   const { data: userStats } = await getUserStats({ userId: id });
   const {
@@ -165,7 +170,7 @@ const Profile = async ({ params, searchParams }: RouteParams) => {
             className="mt-5 flex w-full flex-col gap-6"
           >
             <DataRenderer
-              data={questions}
+              data={typedQuestions}
               empty={EMPTY_QUESTION}
               success={userQuestionsSuccess}
               error={
@@ -189,7 +194,7 @@ const Profile = async ({ params, searchParams }: RouteParams) => {
           </TabsContent>
           <TabsContent value="answers" className="flex w-full flex-col gap-6">
             <DataRenderer
-              data={answers}
+              data={typedAnswers}
               empty={EMBTY_ANSWERS}
               success={userAnswersSuccess}
               error={
@@ -219,7 +224,7 @@ const Profile = async ({ params, searchParams }: RouteParams) => {
           <h3 className="h3-bold text-dark200_light900">Top Tech</h3>
           <div className="mt-7 flex flex-col gap-4">
             <DataRenderer
-              data={tags}
+              data={typedTags}
               empty={EMBTY_ANSWERS}
               success={userTopTagsSuccess}
               error={
