@@ -55,12 +55,14 @@ const TagCards = ({
     </>
   );
   if (compact) {
+    const href = ROUTES.TAG(_id);
+   
     return isButton ? (
       <button onClick={handleClick} className="flex justify-between gap-2">
         {Content}
       </button>
     ) : (
-      <Link href={ROUTES.TAG(_id)} className="flex justify-between gap-2">
+      <Link href={href} className="flex justify-between gap-2">
         {Content}
       </Link>
     );

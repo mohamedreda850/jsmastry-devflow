@@ -1,4 +1,3 @@
-import { AbsoluteString } from "next/dist/lib/metadata/types/metadata-types";
 import { NextResponse } from "next/server";
 
 export interface Tag {
@@ -6,11 +5,13 @@ export interface Tag {
   name: string;
   questions?: number;
 }
+
 export interface Author {
   _id: string;
   name: string;
   image: string;
 }
+
 export interface Question {
   _id: string;
   title: string;
@@ -24,7 +25,14 @@ export interface Question {
   view: number;
 }
 
-type ActionResponse<T = null> = {
+export interface AuthCredentials {
+  name: string;
+  username: string;
+  email: string;
+  password: string;
+}
+
+export type ActionResponse<T = null> = {
   success: boolean;
   data?: T;
   error?: {
@@ -33,20 +41,23 @@ type ActionResponse<T = null> = {
   };
   status?: number;
 };
-type SuccessResponse<T = null> = ActionResponse<T> & { success: true };
-type ErrorResponse = ActionResponse<undefined> & { success: false };
-type APIErrorResponse = NextResponse<ErrorResponse>;
-type APIResponse<T = null> = NextResponse<SuccessResponse<T> | ErrorResponse>;
+
+export type SuccessResponse<T = null> = ActionResponse<T> & { success: true };
+export type ErrorResponse = ActionResponse<undefined> & { success: false };
+export type APIErrorResponse = NextResponse<ErrorResponse>;
+export type APIResponse<T = null> = NextResponse<
+  SuccessResponse<T> | ErrorResponse
+>;
 
 export interface RouteParams {
   params: Promise<Record<string, string>>;
   searchParams: Promise<Record<string, string>>;
 }
 
-interface PaginatedSearchParams {
+export interface PaginatedSearchParams {
   page?: number;
   pageSize?: number;
-  query?: AbsoluteString;
+  query?: string;
   filter?: string;
   sort?: string;
 }
@@ -85,3 +96,14 @@ export interface BadgeCounts {
   SILVER: number;
   BRONZE: number;
 }
+
+export type UpdateUserParams = {
+  userId: string;
+  name?: string;
+  username?: string;
+  email?: string;
+  bio?: string;
+  image?: string;
+  location?: string;
+  portfolio?: string;
+};

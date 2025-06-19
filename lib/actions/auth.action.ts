@@ -9,12 +9,12 @@ import User from "@/database/user.model";
 
 import action from "../handlers/action";
 import handleError from "../handlers/error";
-import { ActionResponse, ErrorResponse } from "@/types/global";
+import { ActionResponse, ErrorResponse, AuthCredentials } from "@/types/global";
 import { SignInSchema, SignUpSchema } from "../vaildations";
 import { NotFoundError } from "../http-errors";
 
 export async function signUpWithCredentials(
-  params: AuthCredentials,
+  params: AuthCredentials
 ): Promise<ActionResponse> {
   const validationResult = await action({ params, schema: SignUpSchema });
 
@@ -56,7 +56,7 @@ export async function signUpWithCredentials(
           password: hashedPassword,
         },
       ],
-      { session },
+      { session }
     );
 
     await session.commitTransaction();
@@ -74,7 +74,7 @@ export async function signUpWithCredentials(
   }
 }
 export async function signInWithCredentials(
-  params: Pick<AuthCredentials, "email" | "password">,
+  params: Pick<AuthCredentials, "email" | "password">
 ): Promise<ActionResponse> {
   const validationResult = await action({ params, schema: SignInSchema });
 
@@ -99,7 +99,7 @@ export async function signInWithCredentials(
 
     const passwordMatch = await bcrypt.compare(
       password,
-      existingAccount.password,
+      existingAccount.password
     );
     if (!passwordMatch) throw new Error("Password does not match");
 

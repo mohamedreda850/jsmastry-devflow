@@ -28,14 +28,14 @@ const RightSidebar = async () => {
             error={error || { message: "An unknown error occurred" }}
             render={(hotQuestions) => (
               <div className="mt-7 flex w-full flex-col gap-[30px]">
-                {hotQuestions.map(({ _id, title }) => (
+                {(hotQuestions as any[]).map((question) => (
                   <Link
-                    href={ROUTES.QUESTION(_id)}
+                    href={ROUTES.QUESTION(question._id)}
                     className="flex cursor-pointer items-center justify-between gap-6"
-                    key={_id}
+                    key={question._id}
                   >
                     <p className="body-medium text-dark500_light700 line-clamp-2">
-                      {title}
+                      {question.title}
                     </p>
                     <Image
                       src={icon}
@@ -63,12 +63,12 @@ const RightSidebar = async () => {
           error={errorTags || { message: "An unknown error occurred" }}
           render={(tags) => (
             <div className="mt-7 flex flex-col gap-4">
-              {tags.map(({ _id, name, questions }) => (
+              {(tags as any[]).map((tag) => (
                 <TagCards
-                  key={_id}
-                  _id={_id}
-                  name={name}
-                  questions={questions}
+                  key={tag._id}
+                  _id={tag._id}
+                  name={tag.name}
+                  questions={tag.questions}
                   showCount
                   compact
                 />

@@ -26,7 +26,6 @@ const Tags = async ({ searchParams }: RouteParams) => {
     filter,
   });
   const { tags, isNext } = data || {};
-  console.log(tags, JSON.stringify(tags, null, 1));
 
   return (
     <>
@@ -51,8 +50,8 @@ const Tags = async ({ searchParams }: RouteParams) => {
         empty={EMPTY_TAGS}
         render={(tags) => (
           <div className="mt-10 flex w-full flex-wrap gap-4">
-            {tags.map((tag) => (
-              <TagCards key={tag._id} {...tag} />
+            {tags.map((tag: any) => (
+              <TagCards key={tag._id} _id={tag._id} name={tag.name} questions={tag.questions} />
             ))}
           </div>
         )}
